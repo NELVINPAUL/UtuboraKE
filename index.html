@@ -1,387 +1,672 @@
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>UtuboraMentorsKE</title>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<title>UtuboraMentorsKE — Live Voting</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800;900&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 :root{
---gold:#F5A623;--gold-d:#B8741A;--gold-bg:#2A1800;
---green:#1DB954;--green-d:#0F7A34;--green-bg:#0A2010;
---red:#E74C3C;--red-bg:#2A0A08;
---mpesa:#00B300;
---bg:#0D0D0D;--s1:#1A1A1A;--s2:#252525;--s3:#2F2F2F;
---b1:#333;--b2:#444;
---t1:#F2F2F2;--t2:#A0A0A0;--t3:#666;
---purple:#9B59B6;--teal:#1ABC9C;--pink:#E91E8C;
+  --gold:#C9A84C;
+  --gold2:#E8C97A;
+  --gold3:#F5DFA0;
+  --gold-dim:#7A6230;
+  --gold-muted:#3D3018;
+  --black:#000000;
+  --black2:#0A0A0A;
+  --black3:#111111;
+  --black4:#1A1A1A;
+  --black5:#242424;
+  --black6:#2E2E2E;
+  --text:#F5F0E8;
+  --text2:#C4B896;
+  --text3:#857860;
+  --text4:#4A4030;
+  --green:#2ECC71;
+  --green-bg:#0A1F12;
+  --red:#E74C3C;
+  --amber:#F39C12;
 }
-body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--t1);min-height:100vh;overflow-x:hidden}
-h1,h2,h3,h4,.logo-text{font-family:'Syne',sans-serif}
-.page{display:none}.page.active{display:block}
+html{scroll-behavior:smooth}
+body{font-family:'Outfit',sans-serif;background:var(--black2);color:var(--text);min-height:100vh;font-size:14px;overflow-x:hidden}
 
-.nav{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:var(--s1);border-bottom:1px solid var(--b1);position:sticky;top:0;z-index:50}
-.logo-text{font-size:16px;font-weight:800;color:var(--gold);line-height:1.1}
-.logo-sub{font-size:10px;color:var(--t2);font-family:'DM Sans',sans-serif;font-weight:400}
-.nav-right{display:flex;gap:6px;align-items:center}
+/* GOLD GRADIENT BACKGROUND */
+body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse 80% 50% at 50% -10%,rgba(201,168,76,.18) 0%,transparent 60%),radial-gradient(ellipse 40% 30% at 100% 100%,rgba(201,168,76,.08) 0%,transparent 50%),radial-gradient(ellipse 40% 30% at 0% 80%,rgba(201,168,76,.06) 0%,transparent 50%);pointer-events:none;z-index:0}
+body::after{content:'';position:fixed;inset:0;background:url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23C9A84C' fill-opacity='0.025'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");pointer-events:none;z-index:0}
+.page{display:none;position:relative;z-index:1}.page.active{display:block}
 
-.btn{padding:8px 14px;border-radius:8px;border:none;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;transition:all .18s;display:inline-flex;align-items:center;gap:5px;justify-content:center}
-.btn:disabled{opacity:.45;cursor:not-allowed}
-.btn-gold{background:var(--gold);color:#000;font-weight:600}
-.btn-gold:hover:not(:disabled){background:var(--gold-d);color:#fff}
-.btn-green{background:var(--green);color:#fff;font-weight:600}
-.btn-green:hover{background:var(--green-d)}
-.btn-mpesa{background:var(--mpesa);color:#fff;font-weight:600}
-.btn-mpesa:hover{background:#009900}
-.btn-red{background:var(--red);color:#fff}
-.btn-ghost{background:transparent;color:var(--t2);border:1px solid var(--b2)}
-.btn-ghost:hover{background:var(--s2);color:var(--t1)}
-.btn-outline{background:transparent;border:1px solid var(--b2);color:var(--t2)}
-.btn-outline:hover{border-color:var(--gold);color:var(--gold)}
-.btn-google{background:#fff;color:#333;font-weight:600;border:1px solid #ddd;width:100%;padding:11px}
-.btn-google:hover{background:#f5f5f5}
-.btn-full{width:100%;padding:12px}
-.btn-sm{padding:5px 10px;font-size:12px}
+/* TYPOGRAPHY */
+.serif{font-family:'Playfair Display',serif}
+h1,h2,h3{font-family:'Playfair Display',serif}
 
-.inp{width:100%;padding:11px 14px;background:var(--s2);border:1px solid var(--b2);border-radius:9px;color:var(--t1);font-family:'DM Sans',sans-serif;font-size:14px;outline:none;transition:border .15s}
-.inp:focus{border-color:var(--gold)}
-.inp::placeholder{color:var(--t3)}
-.form-group{margin-bottom:12px}
-.form-label{font-size:12px;color:var(--t2);margin-bottom:5px;display:block}
-.form-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.err{color:var(--red);font-size:12px;margin-top:6px;display:none}
+/* GOLD LINE DECORATOR */
+.gold-line{width:40px;height:2px;background:linear-gradient(90deg,var(--gold),var(--gold2));border-radius:1px;margin:6px 0 12px}
 
-.card{background:var(--s1);border:1px solid var(--b1);border-radius:14px;padding:14px}
-.card.highlight{border-color:var(--gold);background:linear-gradient(135deg,#1a1200 0%,var(--s1) 100%)}
+/* NAVBAR */
+.nav{display:flex;align-items:center;justify-content:space-between;padding:14px 20px;background:rgba(0,0,0,.85);border-bottom:1px solid rgba(201,168,76,.2);position:sticky;top:0;z-index:100;backdrop-filter:blur(20px)}
+.nav-brand{display:flex;align-items:center;gap:10px}
+.nav-logo-mark{width:34px;height:34px;background:linear-gradient(135deg,var(--gold),var(--gold2));border-radius:8px;display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:14px;font-weight:900;color:#000;flex-shrink:0}
+.nav-name{font-family:'Playfair Display',serif;font-size:15px;font-weight:700;color:var(--gold2);line-height:1.1}
+.nav-sub{font-size:9px;color:var(--text3);letter-spacing:.8px;text-transform:uppercase;font-weight:500}
+.nav-right{display:flex;gap:8px;align-items:center}
+.live-pill{display:inline-flex;align-items:center;gap:5px;background:rgba(201,168,76,.1);border:1px solid rgba(201,168,76,.3);color:var(--gold2);padding:4px 10px;border-radius:20px;font-size:10px;font-weight:600;letter-spacing:.5px}
+.ldot{width:6px;height:6px;background:var(--gold);border-radius:50%;animation:pulse 1.5s infinite}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.8)}}
 
-.toast{position:fixed;top:70px;left:50%;transform:translateX(-50%);background:var(--s2);border:1px solid var(--b2);color:var(--t1);padding:10px 18px;border-radius:10px;font-size:13px;font-weight:500;z-index:999;white-space:nowrap;transition:opacity .3s}
-.toast.ok{border-color:var(--green);color:var(--green)}
+/* BUTTONS */
+.btn{padding:9px 18px;border-radius:8px;border:none;cursor:pointer;font-family:'Outfit',sans-serif;font-size:13px;font-weight:600;transition:all .2s;display:inline-flex;align-items:center;gap:7px;justify-content:center;letter-spacing:.2px}
+.btn:disabled{opacity:.35;cursor:not-allowed}
+.btn-gold{background:linear-gradient(135deg,var(--gold),var(--gold2));color:#000;font-weight:700}
+.btn-gold:hover:not(:disabled){background:linear-gradient(135deg,var(--gold2),var(--gold3));transform:translateY(-1px);box-shadow:0 4px 20px rgba(201,168,76,.3)}
+.btn-outline{background:transparent;border:1px solid rgba(201,168,76,.35);color:var(--gold2)}
+.btn-outline:hover:not(:disabled){border-color:var(--gold);color:var(--gold);background:rgba(201,168,76,.05)}
+.btn-ghost{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);color:var(--text2)}
+.btn-ghost:hover:not(:disabled){background:rgba(255,255,255,.08);color:var(--text)}
+.btn-green{background:linear-gradient(135deg,#27ae60,#2ecc71);color:#fff;font-weight:700}
+.btn-green:hover:not(:disabled){transform:translateY(-1px);box-shadow:0 4px 16px rgba(46,204,113,.3)}
+.btn-danger{background:rgba(231,76,60,.15);border:1px solid rgba(231,76,60,.3);color:var(--red)}
+.btn-danger:hover:not(:disabled){background:rgba(231,76,60,.25)}
+.btn-full{width:100%;padding:13px}
+.btn-sm{padding:6px 13px;font-size:12px}
+
+/* INPUTS */
+.inp{width:100%;padding:11px 14px;background:rgba(255,255,255,.04);border:1px solid rgba(201,168,76,.2);border-radius:8px;color:var(--text);font-family:'Outfit',sans-serif;font-size:13px;outline:none;transition:all .2s}
+.inp:focus{border-color:var(--gold);background:rgba(201,168,76,.05);box-shadow:0 0 0 3px rgba(201,168,76,.1)}
+.inp::placeholder{color:var(--text4)}
+.lbl{font-size:11px;color:var(--text3);margin-bottom:6px;display:block;letter-spacing:.5px;text-transform:uppercase;font-weight:500}
+.fg{margin-bottom:14px}
+.fr{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(max-width:400px){.fr{grid-template-columns:1fr}}
+.err{color:var(--red);font-size:11px;margin-top:6px;display:none;background:rgba(231,76,60,.08);padding:8px 12px;border-radius:6px;border-left:2px solid var(--red)}
+
+/* TAB ROW */
+.tab-row{display:grid;grid-template-columns:1fr 1fr;background:rgba(255,255,255,.03);border:1px solid rgba(201,168,76,.15);border-radius:10px;padding:3px;margin-bottom:20px}
+.tab-btn{padding:9px;border-radius:8px;border:none;background:transparent;color:var(--text3);font-family:'Outfit',sans-serif;font-size:13px;font-weight:500;cursor:pointer;transition:.2s;letter-spacing:.2px}
+.tab-btn.active{background:linear-gradient(135deg,var(--gold),var(--gold2));color:#000;font-weight:700}
+
+/* DIVIDER */
+.divider{display:flex;align-items:center;gap:10px;margin:16px 0;color:var(--text4);font-size:11px;letter-spacing:.5px}
+.divider::before,.divider::after{content:'';flex:1;height:1px;background:rgba(201,168,76,.15)}
+
+/* OTP */
+.otp-row{display:flex;gap:10px;justify-content:center;margin:18px 0}
+.otp-box{width:46px;height:54px;border:1.5px solid rgba(201,168,76,.25);border-radius:8px;background:rgba(255,255,255,.04);color:var(--gold2);font-size:22px;font-family:'Playfair Display',serif;font-weight:700;text-align:center;outline:none;transition:all .2s}
+.otp-box:focus{border-color:var(--gold);background:rgba(201,168,76,.07);box-shadow:0 0 0 3px rgba(201,168,76,.1)}
+@media(max-width:380px){.otp-box{width:40px;height:48px;font-size:18px;gap:7px}}
+
+/* CARD */
+.card{background:rgba(255,255,255,.03);border:1px solid rgba(201,168,76,.15);border-radius:12px;padding:14px}
+.card.gold-accent{border-color:rgba(201,168,76,.4);background:linear-gradient(135deg,rgba(201,168,76,.06),rgba(0,0,0,.2))}
+
+/* TOAST */
+.toast{position:fixed;top:70px;left:50%;transform:translateX(-50%);padding:10px 20px;border-radius:10px;font-size:12px;font-weight:600;z-index:9999;white-space:nowrap;transition:all .3s;border:1px solid rgba(201,168,76,.3);background:rgba(0,0,0,.95);color:var(--gold2);backdrop-filter:blur(10px);letter-spacing:.2px;max-width:90vw}
+.toast.ok{border-color:var(--green);color:var(--green);background:rgba(0,0,0,.95)}
 .toast.err-t{border-color:var(--red);color:var(--red)}
-.toast.hidden{opacity:0;pointer-events:none}
+.toast.hidden{opacity:0;pointer-events:none;transform:translateX(-50%) translateY(-8px)}
 
-.ldot{width:7px;height:7px;background:var(--red);border-radius:50%;display:inline-block;animation:pulse 1.2s infinite}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:.2}}
+/* AUTH PAGE */
+.auth-wrap{max-width:400px;margin:0 auto;padding:28px 20px}
+.auth-head{text-align:center;margin-bottom:28px}
+.auth-logo{font-size:26px;font-weight:900;background:linear-gradient(135deg,var(--gold),var(--gold2),var(--gold3));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:6px}
+.auth-head p{font-size:12px;color:var(--text3);letter-spacing:.5px}
+.auth-ornament{display:flex;align-items:center;justify-content:center;gap:8px;margin:10px 0}
+.auth-ornament span{width:30px;height:1px;background:linear-gradient(90deg,transparent,var(--gold-dim))}
+.auth-ornament .diamond{width:6px;height:6px;background:var(--gold);transform:rotate(45deg)}
 
-.st{font-family:'Syne',sans-serif;font-size:15px;font-weight:700;margin-bottom:10px;display:flex;align-items:center;gap:7px}
-.badge{font-size:10px;background:var(--s2);color:var(--t2);padding:2px 7px;border-radius:10px;font-family:'DM Sans',sans-serif;font-weight:400}
+/* VOTER PAGE */
+.hero{padding:28px 20px 20px;text-align:center;position:relative}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:6px;background:rgba(201,168,76,.1);border:1px solid rgba(201,168,76,.25);color:var(--gold2);padding:5px 14px;border-radius:20px;font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:14px}
+.hero h1{font-size:clamp(22px,5vw,30px);font-weight:900;line-height:1.2;margin-bottom:6px;background:linear-gradient(135deg,#fff 30%,var(--gold2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero p{font-size:12px;color:var(--text3);margin-bottom:18px}
+.stats-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;max-width:480px;margin:0 auto 16px}
+.scard{background:rgba(255,255,255,.03);border:1px solid rgba(201,168,76,.15);border-radius:10px;padding:12px 6px;text-align:center}
+.snum{font-family:'Playfair Display',serif;font-size:22px;font-weight:700;background:linear-gradient(135deg,var(--gold),var(--gold2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1}
+.slbl{font-size:9px;color:var(--text3);text-transform:uppercase;letter-spacing:.7px;margin-top:3px}
+.deadline-row{background:rgba(255,255,255,.03);border:1px solid rgba(201,168,76,.15);border-radius:10px;padding:10px 16px;display:flex;align-items:center;justify-content:space-between;max-width:480px;margin:0 auto}
 
-.ov{position:fixed;inset:0;background:rgba(0,0,0,.82);z-index:200;display:flex;align-items:flex-end;justify-content:center}
-.ov.hidden{display:none}
-.modal{background:var(--s1);border-radius:20px 20px 0 0;padding:22px 18px 28px;width:100%;max-width:480px;border-top:1px solid var(--b2)}
-.modal-handle{width:38px;height:4px;background:var(--b2);border-radius:2px;margin:0 auto 18px}
-
-.av{border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-weight:700;flex-shrink:0}
-.pb{height:6px;background:var(--s3);border-radius:3px;overflow:hidden}
-.pf{height:100%;border-radius:3px;transition:width .5s}
-
-.wallet-hero{background:linear-gradient(135deg,#1a1200,#0d0d0d);border:1px solid var(--gold);border-radius:16px;padding:18px;margin:14px;text-align:center}
-.wallet-bal{font-family:'Syne',sans-serif;font-size:36px;font-weight:800;color:var(--gold)}
-.tx-item{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--b1)}
-.tx-icon{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0}
-.tx-icon.dep{background:var(--green-bg);color:var(--green)}
-.tx-icon.wit{background:var(--red-bg);color:var(--red)}
-.tx-icon.vot{background:var(--gold-bg);color:var(--gold)}
-.tx-amt.pos{color:var(--green)}
-.tx-amt.neg{color:var(--red)}
-
-.contestants{display:flex;flex-direction:column;gap:11px;padding:0 14px;margin-bottom:18px}
-.ticker{background:var(--s2);border-top:1px solid var(--b1);border-bottom:1px solid var(--b1);padding:7px 14px;display:flex;gap:16px;overflow-x:auto;scrollbar-width:none;margin-bottom:14px}
+/* TICKER */
+.ticker{background:rgba(0,0,0,.5);border-top:1px solid rgba(201,168,76,.1);border-bottom:1px solid rgba(201,168,76,.1);padding:8px 16px;display:flex;gap:16px;overflow-x:auto;scrollbar-width:none;margin-bottom:16px}
 .ticker::-webkit-scrollbar{display:none}
-.ticker-item{display:flex;align-items:center;gap:5px;white-space:nowrap;font-size:12px}
+.t-item{display:flex;align-items:center;gap:6px;white-space:nowrap;font-size:11px}
+.t-rank{font-family:'Playfair Display',serif;font-weight:700;color:var(--gold);font-size:10px}
 
-.cmt-card{background:var(--s1);border:1px solid var(--b1);border-radius:9px;padding:10px 12px;margin-bottom:7px}
-.share-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:7px;padding:0 14px;margin-bottom:18px}
-.sh-btn{padding:9px 4px;border-radius:8px;font-size:11px;font-weight:600;border:none;cursor:pointer;text-align:center}
-.sh-wa{background:#25D366;color:#fff}
-.sh-fb{background:#1877F2;color:#fff}
-.sh-cp{background:var(--s2);color:var(--t1);border:1px solid var(--b2)}
+/* CONTESTANT LIST */
+.clist{display:flex;flex-direction:column;gap:12px;padding:0 16px;margin-bottom:20px;max-width:600px;margin-left:auto;margin-right:auto}
+.vcard{background:rgba(255,255,255,.03);border:1px solid rgba(201,168,76,.15);border-radius:14px;padding:14px;transition:border-color .2s}
+.vcard.lead{border-color:rgba(201,168,76,.5);background:linear-gradient(135deg,rgba(201,168,76,.07),rgba(0,0,0,.3))}
+.vcard:hover{border-color:rgba(201,168,76,.3)}
+.av{border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-weight:700;flex-shrink:0;background:linear-gradient(135deg,var(--gold-muted),var(--gold-dim));color:var(--gold2)}
+.pb{height:4px;background:rgba(255,255,255,.07);border-radius:2px;overflow:hidden}
+.pf{height:100%;border-radius:2px;transition:width .6s ease;background:linear-gradient(90deg,var(--gold),var(--gold2))}
 
-.admin-nav{display:flex;gap:3px;padding:10px 14px;background:var(--s1);border-bottom:1px solid var(--b1);overflow-x:auto;scrollbar-width:none}
-.admin-nav::-webkit-scrollbar{display:none}
-.atab{padding:6px 12px;border-radius:7px;font-size:12px;cursor:pointer;white-space:nowrap;border:none;background:transparent;color:var(--t2);font-family:'DM Sans',sans-serif}
-.atab.active{background:var(--gold);color:#000;font-weight:600}
-.agrid{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:16px}
-.astat{background:var(--s1);border:1px solid var(--b1);border-radius:9px;padding:11px}
-.astat-n{font-family:'Syne',sans-serif;font-size:20px;font-weight:700;color:var(--gold)}
-.astat-l{font-size:11px;color:var(--t2)}
-.ctrl-card{background:var(--s1);border:1px solid var(--b1);border-radius:10px;padding:13px;margin-bottom:10px}
-.ctrl-card h4{font-size:13px;font-weight:600;margin-bottom:4px}
-.ctrl-card p{font-size:12px;color:var(--t2);margin-bottom:10px}
-.toggle{width:42px;height:22px;border-radius:11px;background:var(--s3);border:none;cursor:pointer;position:relative;transition:.2s;flex-shrink:0}
-.toggle.on{background:var(--green)}
-.toggle::after{content:'';position:absolute;width:16px;height:16px;border-radius:50%;background:#fff;top:3px;left:3px;transition:.2s}
-.toggle.on::after{left:23px}
+/* SHARE */
+.share-row{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;padding:0 16px;margin-bottom:20px;max-width:600px;margin:0 auto 20px}
+.sh-btn{padding:10px 6px;border-radius:8px;font-size:11px;font-weight:600;border:1px solid;cursor:pointer;text-align:center;letter-spacing:.3px;transition:.2s}
+.sh-wa{background:rgba(37,211,102,.1);border-color:rgba(37,211,102,.3);color:#25D366}
+.sh-wa:hover{background:rgba(37,211,102,.2)}
+.sh-fb{background:rgba(24,119,242,.1);border-color:rgba(24,119,242,.3);color:#1877F2}
+.sh-fb:hover{background:rgba(24,119,242,.2)}
+.sh-cp{background:rgba(201,168,76,.07);border-color:rgba(201,168,76,.25);color:var(--gold2)}
+.sh-cp:hover{background:rgba(201,168,76,.15)}
+
+/* COMMENTS */
+.cmt-card{background:rgba(255,255,255,.025);border:1px solid rgba(201,168,76,.1);border-radius:8px;padding:10px 13px;margin-bottom:7px}
+.cmt-card:hover{border-color:rgba(201,168,76,.2)}
+
+/* SECTION HEADER */
+.sec-head{padding:0 16px;margin-bottom:11px;max-width:600px;margin-left:auto;margin-right:auto}
+.st{font-family:'Playfair Display',serif;font-size:16px;font-weight:700;margin-bottom:2px;display:flex;align-items:center;gap:8px;color:var(--gold2)}
+.st-line{width:24px;height:2px;background:linear-gradient(90deg,var(--gold),transparent);border-radius:1px;margin-bottom:12px}
+
+/* WALLET */
+.wallet-hero{background:linear-gradient(135deg,rgba(201,168,76,.12),rgba(0,0,0,.5));border:1px solid rgba(201,168,76,.3);border-radius:16px;padding:22px;margin:16px;text-align:center;position:relative;overflow:hidden;max-width:500px;margin-left:auto;margin-right:auto}
+.wallet-hero::before{content:'';position:absolute;top:-40px;right:-40px;width:150px;height:150px;background:radial-gradient(circle,rgba(201,168,76,.15),transparent);pointer-events:none}
+.wbal{font-family:'Playfair Display',serif;font-size:38px;font-weight:900;background:linear-gradient(135deg,var(--gold),var(--gold2),var(--gold3));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1;margin:6px 0}
+.tx-item{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid rgba(201,168,76,.08)}
+.tx-icon{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0}
+.tx-pos{color:var(--green)}
+.tx-neg{color:var(--red)}
+
+/* SEC INDICATORS */
+.sec-badge{display:inline-flex;align-items:center;gap:5px;font-size:11px;padding:6px 11px;border-radius:6px;margin-bottom:7px}
+.sec-ok{background:var(--green-bg);color:var(--green);border:1px solid rgba(46,204,113,.2)}
+.sec-warn{background:rgba(243,156,18,.08);color:var(--amber);border:1px solid rgba(243,156,18,.2)}
+
+/* ADMIN */
+.admin-tabs{display:flex;gap:4px;padding:10px 12px;background:rgba(0,0,0,.7);border-bottom:1px solid rgba(201,168,76,.15);overflow-x:auto;scrollbar-width:none;backdrop-filter:blur(10px);position:sticky;top:61px;z-index:50}
+.admin-tabs::-webkit-scrollbar{display:none}
+.atab{padding:6px 13px;border-radius:7px;font-size:11px;cursor:pointer;white-space:nowrap;border:none;background:transparent;color:var(--text3);font-family:'Outfit',sans-serif;font-weight:500;transition:.2s;letter-spacing:.2px}
+.atab.active{background:linear-gradient(135deg,var(--gold),var(--gold2));color:#000;font-weight:700}
+.atab:hover:not(.active){color:var(--gold2);background:rgba(201,168,76,.07)}
+.agrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px}
+.astat{background:rgba(255,255,255,.03);border:1px solid rgba(201,168,76,.15);border-radius:10px;padding:13px}
+.astat:hover{border-color:rgba(201,168,76,.3)}
+.astat-n{font-family:'Playfair Display',serif;font-size:22px;font-weight:700;background:linear-gradient(135deg,var(--gold),var(--gold2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.astat-l{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.5px;margin-top:2px}
+.ctrl-card{background:rgba(255,255,255,.03);border:1px solid rgba(201,168,76,.15);border-radius:10px;padding:14px;margin-bottom:10px}
+.ctrl-card h4{font-size:13px;font-weight:600;margin-bottom:3px;color:var(--gold2)}
+.ctrl-card p{font-size:11px;color:var(--text3);margin-bottom:10px}
+.toggle{width:44px;height:22px;border-radius:11px;background:rgba(255,255,255,.1);border:none;cursor:pointer;position:relative;transition:.25s;flex-shrink:0}
+.toggle.on{background:linear-gradient(135deg,var(--gold),var(--gold2))}
+.toggle::after{content:'';position:absolute;width:16px;height:16px;border-radius:50%;background:#fff;top:3px;left:3px;transition:.25s;box-shadow:0 1px 4px rgba(0,0,0,.4)}
+.toggle.on::after{left:25px}
+
+/* BARS */
+.bar-row{display:flex;align-items:center;gap:8px;margin-bottom:6px}
+.bar-lbl{font-size:11px;color:var(--text3);width:72px;flex-shrink:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.bar-track{flex:1;height:18px;background:rgba(255,255,255,.05);border-radius:4px;overflow:hidden}
+.bar-fill{height:100%;border-radius:4px;display:flex;align-items:center;padding-left:7px;font-size:10px;font-weight:700;transition:width .6s;background:linear-gradient(90deg,var(--gold),var(--gold2));color:rgba(0,0,0,.8)}
+.bar-val{font-size:11px;color:var(--text3);min-width:28px;text-align:right}
+
+/* ACCESS LEVELS */
+.level-badge{display:inline-flex;align-items:center;gap:4px;padding:3px 9px;border-radius:5px;font-size:10px;font-weight:700;letter-spacing:.3px}
+.level-admin{background:rgba(201,168,76,.15);color:var(--gold2);border:1px solid rgba(201,168,76,.3)}
+.level-moderator{background:rgba(243,156,18,.1);color:var(--amber);border:1px solid rgba(243,156,18,.25)}
+.level-voter{background:rgba(255,255,255,.05);color:var(--text2);border:1px solid rgba(255,255,255,.1)}
+.level-viewer{background:rgba(46,204,113,.08);color:var(--green);border:1px solid rgba(46,204,113,.2)}
+
+/* TABLE */
 .vtbl{width:100%;border-collapse:collapse;font-size:11px;table-layout:fixed}
-.vtbl th{text-align:left;padding:7px 5px;border-bottom:1px solid var(--b1);color:var(--t2);font-weight:500}
-.vtbl td{padding:6px 5px;border-bottom:1px solid var(--b1);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.cbr{display:flex;align-items:center;gap:7px;margin-bottom:5px}
-.cbl{font-size:11px;color:var(--t2);width:72px;flex-shrink:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.cbt{flex:1;height:15px;background:var(--s3);border-radius:3px;overflow:hidden}
-.cbf{height:100%;border-radius:3px;display:flex;align-items:center;padding-left:5px;font-size:10px;font-weight:600;color:#000;transition:width .5s}
-.cbv{font-size:11px;color:var(--t2);min-width:28px;text-align:right}
-.user-chip{display:flex;align-items:center;gap:6px;padding:4px 10px;background:var(--s2);border:1px solid var(--b2);border-radius:20px;cursor:pointer;font-size:12px;color:var(--t1)}
-.pad{padding:0 14px}
-.stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-bottom:13px}
-.scard{background:var(--s1);border:1px solid var(--b1);border-radius:9px;padding:9px 7px;text-align:center}
-.snum{font-family:'Syne',sans-serif;font-size:19px;font-weight:700;color:var(--gold)}
-.slbl{font-size:10px;color:var(--t2)}
-.deadline-bar{background:var(--s1);border:1px solid var(--b1);border-radius:9px;padding:9px 13px;display:flex;align-items:center;justify-content:space-between;margin-bottom:13px}
-.divider{display:flex;align-items:center;gap:10px;margin:14px 0;color:var(--t3);font-size:12px}
-.divider::before,.divider::after{content:'';flex:1;height:1px;background:var(--b1)}
-.auth-switch{text-align:center;font-size:13px;color:var(--t2);margin-top:12px}
-.auth-switch a{color:var(--gold);cursor:pointer}
-.auth-switch a:hover{text-decoration:underline}
-.tab-btns{display:grid;grid-template-columns:1fr 1fr;gap:0;background:var(--s2);border-radius:10px;padding:3px;margin-bottom:20px}
-.tab-btn{padding:9px;border-radius:8px;border:none;background:transparent;color:var(--t2);font-family:'DM Sans',sans-serif;font-size:14px;font-weight:500;cursor:pointer;transition:.15s}
-.tab-btn.active{background:var(--gold);color:#000;font-weight:600}
+.vtbl th{text-align:left;padding:8px 6px;border-bottom:1px solid rgba(201,168,76,.15);color:var(--text3);font-weight:600;text-transform:uppercase;letter-spacing:.5px;font-size:10px}
+.vtbl td{padding:7px 6px;border-bottom:1px solid rgba(255,255,255,.04);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:11px}
+.vtbl tr:hover td{background:rgba(201,168,76,.03)}
+
+/* USER CHIP */
+.user-chip{display:flex;align-items:center;gap:7px;padding:5px 11px;background:rgba(201,168,76,.08);border:1px solid rgba(201,168,76,.2);border-radius:20px;cursor:pointer;font-size:11px;color:var(--gold2);transition:.2s}
+.user-chip:hover{background:rgba(201,168,76,.14);border-color:rgba(201,168,76,.35)}
+
+/* MODAL */
+.modal-wrap{display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:200;justify-content:flex-end;flex-direction:column;align-items:center;backdrop-filter:blur(6px)}
+.modal-wrap.open{display:flex}
+.modal-box{background:var(--black3);border-radius:20px 20px 0 0;padding:22px 20px 30px;width:100%;max-width:460px;border-top:1px solid rgba(201,168,76,.25)}
+.modal-handle{width:40px;height:4px;background:rgba(201,168,76,.2);border-radius:2px;margin:0 auto 18px}
+
+/* WALLET STRIP */
+#wstrip{display:none;background:rgba(0,0,0,.7);border-bottom:1px solid rgba(201,168,76,.12);padding:8px 16px;align-items:center;justify-content:space-between;backdrop-filter:blur(10px)}
+
+/* MILESTONE */
+#ms-banner{display:none;background:linear-gradient(135deg,rgba(201,168,76,.15),rgba(0,0,0,.3));border:1px solid rgba(201,168,76,.4);border-radius:12px;padding:14px;margin:0 16px 14px;text-align:center;max-width:568px;margin-left:auto;margin-right:auto}
+
+/* PADDED SECTION */
+.pad{padding:0 16px;max-width:600px;margin-left:auto;margin-right:auto}
+.small-badge{font-size:9px;background:rgba(201,168,76,.1);color:var(--gold-dim);padding:2px 7px;border-radius:8px;font-family:'Outfit',sans-serif;font-weight:600;border:1px solid rgba(201,168,76,.15);letter-spacing:.3px;text-transform:uppercase}
+
+/* RESPONSIVE */
+@media(max-width:480px){
+  .hero{padding:20px 14px 16px}
+  .clist,.share-row{padding:0 12px}
+  .pad{padding:0 12px}
+  .sec-head{padding:0 12px}
+  .wallet-hero{margin:12px;padding:18px}
+  .agrid{grid-template-columns:1fr 1fr}
+}
+@media(min-width:600px){
+  .clist{padding:0 20px}
+  .share-row{padding:0 20px}
+}
 </style>
 </head>
 <body>
-
 <div class="toast hidden" id="toast"></div>
 
-<!-- NAV -->
+<!-- NAVBAR -->
 <nav class="nav">
-  <div>
-    <div class="logo-text">UtuboraMentorsKE</div>
-    <div class="logo-sub">Live Voting Platform</div>
+  <div class="nav-brand">
+    <div class="nav-logo-mark">U</div>
+    <div>
+      <div class="nav-name">UtuboraMentorsKE</div>
+      <div class="nav-sub">Live Voting Platform</div>
+    </div>
   </div>
   <div class="nav-right" id="navRight">
-    <button class="btn btn-ghost btn-sm" onclick="showPage('auth')">Sign In</button>
+    <div class="live-pill"><span class="ldot"></span>LIVE</div>
+    <button class="btn btn-outline btn-sm" onclick="showPage('auth')">Sign In</button>
   </div>
 </nav>
 
-<!-- ===================== AUTH PAGE (LANDING) ===================== -->
+<!-- ====== AUTH PAGE ====== -->
 <div class="page active" id="page-auth">
-  <div style="max-width:380px;margin:0 auto;padding:28px 20px">
+<div class="auth-wrap">
+  <div class="auth-head">
+    <div class="auth-logo">UtuboraMentorsKE</div>
+    <div class="auth-ornament"><span></span><div class="diamond"></div><span></span></div>
+    <p>Kenya's Premier Mentorship Voting Platform</p>
+  </div>
 
-    <!-- Brand header -->
-    <div style="text-align:center;margin-bottom:24px">
-      <div style="font-family:'Syne',sans-serif;font-size:28px;font-weight:800;color:var(--gold);line-height:1.1">UtuboraMentorsKE</div>
-      <div style="font-size:13px;color:var(--t2);margin-top:5px">Kenya's Premier Mentorship Voting Platform</div>
-      <div style="display:inline-flex;align-items:center;gap:5px;background:var(--gold-bg);color:var(--gold);padding:4px 12px;border-radius:20px;font-size:11px;font-weight:600;margin-top:10px"><span class="ldot"></span> LIVE VOTING OPEN</div>
-    </div>
+  <div class="tab-row">
+    <button class="tab-btn active" id="t-signin" onclick="switchTab('signin')">Sign In</button>
+    <button class="tab-btn" id="t-signup" onclick="switchTab('signup')">Register</button>
+  </div>
 
-    <!-- Sign In / Sign Up tabs -->
-    <div class="tab-btns">
-      <button class="tab-btn active" id="tab-signin" onclick="switchTab('signin')">Sign In</button>
-      <button class="tab-btn" id="tab-signup" onclick="switchTab('signup')">Sign Up</button>
-    </div>
+  <button class="btn btn-ghost btn-full" style="margin-bottom:5px" onclick="googleSignIn()">
+    <svg width="16" height="16" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+    Continue with Google
+  </button>
+  <div class="divider">or</div>
 
-    <!-- Google -->
-    <button class="btn btn-google" style="margin-bottom:4px" onclick="googleSignIn()">
-      <svg width="18" height="18" viewBox="0 0 24 24" style="flex-shrink:0"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
-      Continue with Google
-    </button>
-    <div class="divider">or</div>
-
-    <!-- SIGN IN FORM -->
-    <div id="form-signin">
-      <div class="form-group"><label class="form-label">Email</label><input class="inp" id="li-email" type="email" placeholder="you@gmail.com"/></div>
-      <div class="form-group"><label class="form-label">Password</label><input class="inp" id="li-pass" type="password" placeholder="••••••" onkeyup="if(event.key==='Enter')doLogin()"/></div>
-      <div class="err" id="li-err"></div>
-      <button class="btn btn-gold btn-full" style="margin-top:6px" onclick="doLogin()">Sign In →</button>
-      <div class="auth-switch" style="margin-top:14px;font-size:12px;color:var(--t3)">Admin? <a onclick="showPage('admin-login')">Admin portal →</a></div>
-    </div>
-
-    <!-- SIGN UP FORM -->
-    <div id="form-signup" style="display:none">
-      <div class="form-row">
-        <div class="form-group"><label class="form-label">First Name</label><input class="inp" id="su-fname" placeholder="Jane"/></div>
-        <div class="form-group"><label class="form-label">Last Name</label><input class="inp" id="su-lname" placeholder="Wanjiru"/></div>
-      </div>
-      <div class="form-group"><label class="form-label">Email</label><input class="inp" id="su-email" type="email" placeholder="you@gmail.com"/></div>
-      <div class="form-group"><label class="form-label">M-PESA Phone</label><input class="inp" id="su-phone" placeholder="0712345678" maxlength="13"/></div>
-      <div class="form-group"><label class="form-label">Password</label><input class="inp" id="su-pass" type="password" placeholder="Min 6 characters"/></div>
-      <div class="err" id="su-err"></div>
-      <button class="btn btn-gold btn-full" style="margin-top:6px" onclick="doSignup()">Create Account →</button>
-    </div>
-
-    <!-- Demo hint -->
-    <div style="background:var(--s2);border-radius:9px;padding:10px 12px;margin-top:16px;font-size:11px;color:var(--t3);text-align:center">
-      Demo: <span style="color:var(--t2)">jane@demo.ke</span> / <span style="color:var(--t2)">demo123</span>
+  <!-- SIGN IN -->
+  <div id="form-signin">
+    <div class="fg"><label class="lbl">Email Address</label><input class="inp" id="li-email" type="email" placeholder="you@example.com"/></div>
+    <div class="fg"><label class="lbl">Password</label><input class="inp" id="li-pass" type="password" placeholder="••••••" onkeyup="if(event.key==='Enter')doLogin()"/></div>
+    <div class="err" id="li-err"></div>
+    <button class="btn btn-gold btn-full" style="margin-top:8px" onclick="doLogin()">Sign In →</button>
+    <div style="text-align:center;margin-top:12px;font-size:11px;color:var(--text4)">
+      Administrator? <a style="color:var(--gold);cursor:pointer;font-weight:600" onclick="showPage('admin-login')">Admin Portal →</a>
     </div>
   </div>
+
+  <!-- SIGN UP -->
+  <div id="form-signup" style="display:none">
+    <div class="fr">
+      <div class="fg"><label class="lbl">First Name</label><input class="inp" id="su-fn" placeholder="Jane"/></div>
+      <div class="fg"><label class="lbl">Last Name</label><input class="inp" id="su-ln" placeholder="Wanjiru"/></div>
+    </div>
+    <div class="fg"><label class="lbl">Email Address</label><input class="inp" id="su-em" type="email" placeholder="you@example.com"/></div>
+    <div class="fg"><label class="lbl">M-PESA Phone</label><input class="inp" id="su-ph" placeholder="0712345678" maxlength="13"/></div>
+    <div class="fg"><label class="lbl">Password</label><input class="inp" id="su-pw" type="password" placeholder="Minimum 6 characters"/></div>
+    <div class="err" id="su-err"></div>
+    <button class="btn btn-gold btn-full" style="margin-top:8px" onclick="doSignup()">Create Account →</button>
+  </div>
+</div>
 </div>
 
-<!-- ===================== ADMIN LOGIN ===================== -->
+<!-- ====== 2FA PAGE ====== -->
+<div class="page" id="page-2fa">
+<div class="auth-wrap">
+  <div class="auth-head">
+    <div style="font-size:42px;margin-bottom:10px">🔐</div>
+    <h2 style="font-size:20px;background:linear-gradient(135deg,var(--gold),var(--gold2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">Two-Step Verification</h2>
+    <div class="auth-ornament"><span></span><div class="diamond"></div><span></span></div>
+    <p>Code sent to <strong style="color:var(--gold2)" id="tfa-dest">your number</strong></p>
+  </div>
+  <div style="background:rgba(201,168,76,.06);border:1px solid rgba(201,168,76,.15);border-radius:8px;padding:10px 14px;margin-bottom:16px;font-size:11px;color:var(--text3);display:flex;align-items:center;gap:8px">
+    <span style="color:var(--gold)">🔒</span>
+    Expires in <strong style="color:var(--gold2)" id="otp-timer">5:00</strong> — Do not share this code
+  </div>
+  <div class="otp-row" id="otp-row">
+    <input class="otp-box" maxlength="1" oninput="otpMove(this,0)" onkeydown="otpBack(event,0)"/>
+    <input class="otp-box" maxlength="1" oninput="otpMove(this,1)" onkeydown="otpBack(event,1)"/>
+    <input class="otp-box" maxlength="1" oninput="otpMove(this,2)" onkeydown="otpBack(event,2)"/>
+    <input class="otp-box" maxlength="1" oninput="otpMove(this,3)" onkeydown="otpBack(event,3)"/>
+    <input class="otp-box" maxlength="1" oninput="otpMove(this,4)" onkeydown="otpBack(event,4)"/>
+    <input class="otp-box" maxlength="1" oninput="otpMove(this,5)" onkeydown="otpBack(event,5)"/>
+  </div>
+  <div class="err" id="otp-err"></div>
+  <button class="btn btn-gold btn-full" style="margin-top:12px" onclick="verifyOTP()">Verify Code →</button>
+  <button class="btn btn-ghost btn-full" style="margin-top:8px" onclick="resendOTP()">Resend Code</button>
+  <div style="text-align:center;margin-top:14px;font-size:11px"><a style="color:var(--gold);cursor:pointer" onclick="showPage('auth')">← Back to login</a></div>
+</div>
+</div>
+
+<!-- ====== ADMIN LOGIN ====== -->
 <div class="page" id="page-admin-login">
-<div style="max-width:360px;margin:0 auto;padding:28px 20px">
-  <div style="text-align:center;margin-bottom:22px">
-    <div style="font-size:36px;margin-bottom:8px">🔐</div>
-    <div style="font-family:'Syne',sans-serif;font-size:20px;font-weight:700;color:var(--gold)">Admin Portal</div>
-    <div style="font-size:12px;color:var(--t2)">UtuboraMentorsKE · Restricted Access</div>
+<div class="auth-wrap">
+  <div class="auth-head">
+    <div style="font-size:38px;margin-bottom:10px">🔒</div>
+    <div class="auth-logo" style="font-size:20px">Admin Portal</div>
+    <div class="auth-ornament"><span></span><div class="diamond"></div><span></span></div>
+    <p>Restricted Access — Authorised Personnel Only</p>
   </div>
-  <div class="form-group"><label class="form-label">Admin Username</label><input class="inp" id="adm-user" placeholder="superadmin"/></div>
-  <div class="form-group"><label class="form-label">Admin Password</label><input class="inp" type="password" id="adm-pass" placeholder="••••••••" onkeyup="if(event.key==='Enter')adminLogin()"/></div>
+  <div style="background:rgba(231,76,60,.06);border:1px solid rgba(231,76,60,.2);border-radius:8px;padding:10px 14px;margin-bottom:16px;font-size:11px;color:#c0877e;display:flex;align-items:center;gap:8px">
+    <span>⚠️</span> All admin access is logged and monitored
+  </div>
+  <div class="fg"><label class="lbl">Admin Username</label><input class="inp" id="adm-u" placeholder="Enter username"/></div>
+  <div class="fg"><label class="lbl">Admin Password</label><input class="inp" type="password" id="adm-p" placeholder="••••••••" onkeyup="if(event.key==='Enter')adminLogin()"/></div>
   <div class="err" id="adm-err"></div>
-  <button class="btn btn-gold btn-full" style="margin-top:10px" onclick="adminLogin()">Access Dashboard</button>
-  <div class="auth-switch" style="margin-top:12px"><a onclick="showPage('auth')">← Back to voting</a></div>
+  <button class="btn btn-gold btn-full" style="margin-top:10px" onclick="adminLogin()">Access Dashboard →</button>
+  <div style="text-align:center;margin-top:14px;font-size:11px"><a style="color:var(--gold);cursor:pointer" onclick="showPage('auth')">← Back to voting</a></div>
 </div>
 </div>
 
-<!-- ===================== VOTER PAGE ===================== -->
+<!-- ====== ADMIN 2FA ====== -->
+<div class="page" id="page-admin-2fa">
+<div class="auth-wrap">
+  <div class="auth-head">
+    <div style="font-size:38px;margin-bottom:10px">🛡️</div>
+    <h2 style="font-size:18px;background:linear-gradient(135deg,var(--gold),var(--gold2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">Admin Verification</h2>
+    <div class="auth-ornament"><span></span><div class="diamond"></div><span></span></div>
+    <p>Enter the 6-digit security code</p>
+  </div>
+  <div class="otp-row" id="adm-otp-row">
+    <input class="otp-box" maxlength="1" oninput="admOtpMove(this,0)" onkeydown="admOtpBack(event,0)"/>
+    <input class="otp-box" maxlength="1" oninput="admOtpMove(this,1)" onkeydown="admOtpBack(event,1)"/>
+    <input class="otp-box" maxlength="1" oninput="admOtpMove(this,2)" onkeydown="admOtpBack(event,2)"/>
+    <input class="otp-box" maxlength="1" oninput="admOtpMove(this,3)" onkeydown="admOtpBack(event,3)"/>
+    <input class="otp-box" maxlength="1" oninput="admOtpMove(this,4)" onkeydown="admOtpBack(event,4)"/>
+    <input class="otp-box" maxlength="1" oninput="admOtpMove(this,5)" onkeydown="admOtpBack(event,5)"/>
+  </div>
+  <div style="text-align:center;margin-top:6px;font-size:12px;color:var(--gold);font-weight:600" id="adm-otp-hint"></div>
+  <div class="err" id="adm-otp-err"></div>
+  <button class="btn btn-gold btn-full" style="margin-top:12px" onclick="verifyAdminOTP()">Verify →</button>
+  <button class="btn btn-ghost btn-full" style="margin-top:8px" onclick="showPage('admin-login')">← Back</button>
+</div>
+</div>
+
+<!-- ====== VOTER / RESULTS PAGE ====== -->
 <div class="page" id="page-voter">
-  <div style="background:linear-gradient(180deg,#1a1200 0%,var(--bg) 100%);padding:20px 14px 14px;text-align:center">
-    <div style="display:inline-flex;align-items:center;gap:5px;background:var(--gold-bg);color:var(--gold);padding:4px 11px;border-radius:20px;font-size:11px;font-weight:600;margin-bottom:10px"><span class="ldot"></span> LIVE VOTING OPEN</div>
-    <h1 style="font-size:22px;font-weight:800;line-height:1.2;margin-bottom:5px">Cast Your Vote <span style="color:var(--gold)">Win the Title!</span></h1>
-    <p style="font-size:12px;color:var(--t2);margin-bottom:14px">Each vote = <strong style="color:var(--gold)">Ksh 10</strong> from your wallet</p>
-    <div class="stats-row">
+  <div class="hero">
+    <div class="hero-eyebrow"><span class="ldot"></span>LIVE RESULTS</div>
+    <h1>Mentor of the Year<br><span style="background:linear-gradient(135deg,var(--gold),var(--gold2),var(--gold3));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">Live Rankings</span></h1>
+    <p>Real-time vote counts · Updated instantly</p>
+    <div class="stats-grid">
       <div class="scard"><div class="snum" id="tv">0</div><div class="slbl">Total Votes</div></div>
       <div class="scard"><div class="snum" id="tr">0</div><div class="slbl">Ksh Raised</div></div>
-      <div class="scard"><div class="snum" id="vc">0</div><div class="slbl">Voters</div></div>
+      <div class="scard"><div class="snum" id="vc">0</div><div class="slbl">Participants</div></div>
     </div>
-    <div class="deadline-bar">
-      <div><div style="font-size:11px;color:var(--t2)">⏰ Closes in</div><div style="font-family:'Syne',sans-serif;font-size:16px;font-weight:700;color:#FF6B35" id="cdown">--:--:--</div></div>
-      <div style="text-align:right"><div style="font-size:11px;color:var(--t2)">Deadline</div><div style="font-size:11px;color:var(--t3)" id="ddl">—</div></div>
+    <div class="deadline-row">
+      <div><div style="font-size:9px;color:var(--text3);text-transform:uppercase;letter-spacing:.7px;margin-bottom:2px">Closes In</div><div style="font-family:'Playfair Display',serif;font-size:18px;font-weight:700;background:linear-gradient(135deg,var(--gold),var(--gold2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text" id="cdown">--:--:--</div></div>
+      <div style="text-align:right"><div style="font-size:9px;color:var(--text3);text-transform:uppercase;letter-spacing:.7px;margin-bottom:2px">Deadline</div><div style="font-size:11px;color:var(--text3)" id="ddl">—</div></div>
     </div>
   </div>
 
-  <div id="walletStrip" style="display:none;background:var(--s1);border-bottom:1px solid var(--b1);padding:8px 14px;align-items:center;justify-content:space-between">
-    <div style="display:flex;align-items:center;gap:8px"><span style="font-size:12px;color:var(--t2)">My Wallet</span><span style="font-family:'Syne',sans-serif;font-size:16px;font-weight:700;color:var(--gold)" id="ws-bal">Ksh 0</span></div>
-    <button class="btn btn-mpesa btn-sm" onclick="showPage('wallet')">+ Top Up</button>
+  <div id="wstrip">
+    <div style="display:flex;align-items:center;gap:8px">
+      <span style="font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.5px">Wallet</span>
+      <span style="font-family:'Playfair Display',serif;font-size:16px;font-weight:700;background:linear-gradient(135deg,var(--gold),var(--gold2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text" id="ws-bal">Ksh 0</span>
+    </div>
+    <button class="btn btn-outline btn-sm" onclick="showPage('wallet')">+ Top Up</button>
   </div>
 
   <div class="ticker" id="ticker"></div>
-  <div id="ms-banner" style="display:none;background:var(--gold-bg);border:1px solid var(--gold);border-radius:11px;padding:12px;margin:0 14px 12px;text-align:center"><div style="font-family:'Syne',sans-serif;font-size:16px;font-weight:700;color:var(--gold)">🎉 Milestone!</div><div style="font-size:12px;color:var(--t2)" id="ms-txt"></div></div>
 
-  <div class="pad"><div class="st">Contestants <span class="badge" id="rankLabel">Live Rankings</span></div></div>
-  <div class="contestants" id="clist"></div>
+  <div id="ms-banner">
+    <div style="font-family:'Playfair Display',serif;font-size:18px;font-weight:700;background:linear-gradient(135deg,var(--gold),var(--gold2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">🏆 Milestone Reached!</div>
+    <div style="font-size:12px;color:var(--text3);margin-top:4px" id="ms-txt"></div>
+  </div>
 
-  <div class="pad"><div class="st">Share This Vote</div></div>
+  <div class="sec-head" style="margin-top:4px">
+    <div class="st">Contestants <span class="small-badge">Live</span></div>
+    <div class="st-line"></div>
+  </div>
+  <div class="clist" id="clist"></div>
+
+  <div class="sec-head">
+    <div class="st">Share Results</div>
+    <div class="st-line"></div>
+  </div>
   <div class="share-row">
     <button class="sh-btn sh-wa" onclick="shareWA()">📱 WhatsApp</button>
     <button class="sh-btn sh-fb" onclick="shareFB()">📘 Facebook</button>
-    <button class="sh-btn sh-cp" onclick="copyLink()">🔗 Copy</button>
+    <button class="sh-btn sh-cp" onclick="copyLink()">🔗 Copy Link</button>
   </div>
 
   <div class="pad">
     <div class="st">Support Messages</div>
-    <div style="display:flex;gap:7px;margin-bottom:10px">
-      <select class="inp" id="cmt-for" style="width:auto;flex:0 0 auto;padding:8px 10px;font-size:12px"><option value="">For...</option></select>
-      <input class="inp" id="cmt-in" placeholder="Leave a message..." maxlength="100" style="flex:1;padding:8px 10px;font-size:12px"/>
+    <div class="st-line"></div>
+    <div style="display:flex;gap:8px;margin-bottom:12px">
+      <select class="inp" id="cmt-for" style="width:auto;flex:0 0 auto;padding:8px 10px;font-size:12px"><option value="">For…</option></select>
+      <input class="inp" id="cmt-in" placeholder="Leave a message…" maxlength="100" style="flex:1;padding:8px 11px;font-size:12px"/>
       <button class="btn btn-gold btn-sm" onclick="postCmt()">Post</button>
     </div>
     <div id="cmtList"></div>
   </div>
+  <div style="height:28px"></div>
+</div>
+
+<!-- ====== WALLET PAGE ====== -->
+<div class="page" id="page-wallet">
+  <div style="padding:14px 16px 0;max-width:500px;margin:0 auto"><button class="btn btn-ghost btn-sm" onclick="showPage('voter')">← Back</button></div>
+  <div class="wallet-hero">
+    <div style="font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px">Available Balance</div>
+    <div class="wbal" id="wbal">Ksh 0</div>
+    <div style="font-size:11px;color:var(--text3);margin-top:3px" id="wphone"></div>
+    <div class="sec-badge sec-ok" style="justify-content:center;margin:12px auto 0;display:inline-flex">🔒 Wallet secured · 2FA protected</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:14px">
+      <button class="btn btn-gold btn-full" onclick="openWM('deposit')">↓ Deposit M-PESA</button>
+      <button class="btn btn-outline btn-full" onclick="openWM('withdraw')">↑ Withdraw</button>
+    </div>
+  </div>
+
+  <div class="pad" style="margin-bottom:14px">
+    <div class="st">Security Status</div>
+    <div class="st-line"></div>
+    <div class="card">
+      <div class="sec-badge sec-ok">✅ 2FA enabled · All transactions verified</div><br>
+      <div class="sec-badge sec-ok" style="margin-top:4px">✅ Account locked after 5 failed attempts</div><br>
+      <div class="sec-badge sec-warn" style="margin-top:4px">⚠️ Withdraw limit: Ksh 70,000/day</div>
+    </div>
+  </div>
+
+  <div class="pad" style="margin-bottom:14px">
+    <div class="st">Quick Top Up</div>
+    <div class="st-line"></div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+      <button class="btn btn-outline" onclick="quickDep(50)">Ksh 50</button>
+      <button class="btn btn-outline" onclick="quickDep(100)">Ksh 100</button>
+      <button class="btn btn-outline" onclick="quickDep(200)">Ksh 200</button>
+      <button class="btn btn-outline" onclick="quickDep(500)">Ksh 500</button>
+    </div>
+  </div>
+
+  <div class="pad">
+    <div class="st">Transaction History</div>
+    <div class="st-line"></div>
+    <div id="txList"></div>
+  </div>
   <div style="height:24px"></div>
 </div>
 
-<!-- ===================== WALLET PAGE ===================== -->
-<div class="page" id="page-wallet">
-  <div style="padding:14px 14px 0"><button class="btn btn-ghost btn-sm" onclick="showPage('voter')">← Back</button></div>
-  <div class="wallet-hero" id="walletHero">
-    <div style="font-size:12px;color:var(--t2);margin-bottom:4px">Available Balance</div>
-    <div class="wallet-bal" id="wbal">Ksh 0</div>
-    <div style="font-size:12px;color:var(--t3);margin-top:4px" id="wphone"></div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:14px">
-      <button class="btn btn-mpesa btn-full" onclick="openWM('deposit')">⬇ Deposit M-PESA</button>
-      <button class="btn btn-ghost btn-full" onclick="openWM('withdraw')">⬆ Withdraw</button>
-    </div>
-  </div>
-  <div class="pad" style="margin-bottom:14px">
-    <div class="st">Quick Top Up</div>
-    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:7px">
-      <button class="btn btn-outline btn-sm" onclick="quickDep(50)">Ksh 50</button>
-      <button class="btn btn-outline btn-sm" onclick="quickDep(100)">Ksh 100</button>
-      <button class="btn btn-outline btn-sm" onclick="quickDep(200)">Ksh 200</button>
-      <button class="btn btn-outline btn-sm" onclick="quickDep(500)">Ksh 500</button>
-    </div>
-  </div>
-  <div class="pad"><div class="st">Transaction History</div><div id="txList"></div></div>
-  <div style="height:20px"></div>
-</div>
-
-<!-- ===================== ADMIN DASHBOARD ===================== -->
+<!-- ====== ADMIN DASHBOARD ====== -->
 <div class="page" id="page-admin">
-  <div class="admin-nav">
+  <div class="admin-tabs">
     <button class="atab active" onclick="aTab(this,'dash')">📊 Dashboard</button>
-    <button class="atab" onclick="aTab(this,'voters')">👥 Voters</button>
-    <button class="atab" onclick="aTab(this,'wallets')">💳 Wallets</button>
-    <button class="atab" onclick="aTab(this,'ctrl')">🔧 Controls</button>
-    <button class="atab" onclick="aTab(this,'log')">📱 Activity</button>
-    <button class="atab" onclick="aTab(this,'rev')">💰 Revenue</button>
+    <button class="atab" onclick="aTab(this,'voters')">👥 Users</button>
+    <button class="atab" onclick="aTab(this,'wallets')">💰 Wallets</button>
+    <button class="atab" onclick="aTab(this,'access')">🔑 Access</button>
+    <button class="atab" onclick="aTab(this,'ctrl')">⚙️ Controls</button>
+    <button class="atab" onclick="aTab(this,'analytics')">📈 Analytics</button>
   </div>
-  <div style="padding:13px" id="atab-dash">
+
+  <!-- DASHBOARD -->
+  <div style="padding:14px 14px" id="atab-dash">
     <div class="agrid">
       <div class="astat"><div class="astat-n" id="a-tv">0</div><div class="astat-l">Total Votes</div></div>
       <div class="astat"><div class="astat-n" id="a-rev">Ksh 0</div><div class="astat-l">Revenue</div></div>
       <div class="astat"><div class="astat-n" id="a-vu">0</div><div class="astat-l">Registered Users</div></div>
-      <div class="astat"><div class="astat-n" id="a-wt">Ksh 0</div><div class="astat-l">Wallet Total</div></div>
+      <div class="astat"><div class="astat-n" id="a-wt">Ksh 0</div><div class="astat-l">Total Wallet Funds</div></div>
     </div>
     <div class="st">Vote Distribution</div>
+    <div class="st-line"></div>
     <div id="aDist" style="margin-bottom:16px"></div>
     <div class="st">Leaderboard</div>
+    <div class="st-line"></div>
     <div id="aLboard"></div>
   </div>
-  <div style="padding:13px;display:none" id="atab-voters">
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
-      <div class="st" style="margin:0">Users</div>
-      <button class="btn btn-outline btn-sm" onclick="exportCSV()">📥 CSV</button>
+
+  <!-- USERS -->
+  <div style="padding:14px;display:none" id="atab-voters">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+      <div class="st" style="margin:0">Registered Users</div>
+      <button class="btn btn-outline btn-sm" onclick="exportCSV()">⬇ Export CSV</button>
     </div>
-    <table class="vtbl"><thead><tr><th style="width:28%">Name</th><th style="width:30%">Email</th><th style="width:14%">Votes</th><th style="width:16%">Wallet</th><th style="width:12%">Status</th></tr></thead><tbody id="vTbl"></tbody></table>
+    <div style="overflow-x:auto">
+      <table class="vtbl"><thead><tr><th style="width:27%">Name</th><th style="width:28%">Email</th><th style="width:13%">Votes</th><th style="width:17%">Wallet</th><th style="width:15%">Level</th></tr></thead><tbody id="vTbl"></tbody></table>
+    </div>
   </div>
-  <div style="padding:13px;display:none" id="atab-wallets">
-    <div class="st">Wallet Balances</div><div id="walletAdmin"></div>
+
+  <!-- WALLETS -->
+  <div style="padding:14px;display:none" id="atab-wallets">
+    <div class="st">All Wallets</div>
+    <div class="st-line"></div>
+    <div id="walletAdmin"></div>
+    <div style="background:rgba(201,168,76,.07);border:1px solid rgba(201,168,76,.2);border-radius:10px;padding:13px;margin-top:12px;display:flex;justify-content:space-between;align-items:center">
+      <span style="font-size:13px;font-weight:600;color:var(--text2)">Total in Wallets</span>
+      <span class="astat-n" id="a-wtBig">Ksh 0</span>
+    </div>
   </div>
-  <div style="padding:13px;display:none" id="atab-ctrl">
-    <div class="ctrl-card"><h4>🗳️ Voting Status</h4><p>Open or close voting for all users.</p><div style="display:flex;align-items:center;gap:10px"><button class="toggle on" id="vToggle" onclick="toggleVoting()"></button><span id="vStatusLbl" style="font-size:14px;font-weight:600">OPEN</span></div></div>
-    <div class="ctrl-card"><h4>⏰ Extend Deadline</h4><p>Add hours to current deadline.</p><div style="display:flex;gap:8px"><input class="inp" id="extH" type="number" value="24" min="1" style="width:80px;padding:8px"/><button class="btn btn-gold" onclick="extendDL()">Add Hours</button></div></div>
-    <div class="ctrl-card"><h4>🎯 Milestone</h4><p>Celebrate at this vote count.</p><div style="display:flex;gap:8px"><input class="inp" id="msInp" type="number" value="100" style="width:90px;padding:8px"/><button class="btn btn-outline" onclick="setMS()">Set</button></div></div>
-    <div class="ctrl-card"><h4>🔁 Reset Votes</h4><p>Clears all votes. Wallets kept.</p><button class="btn btn-red" onclick="resetVotes()">⚠ Reset All Votes</button></div>
-    <div style="margin-top:14px"><button class="btn btn-ghost btn-full" onclick="adminLogout()">🚪 Logout</button></div>
+
+  <!-- ACCESS LEVELS -->
+  <div style="padding:14px;display:none" id="atab-access">
+    <div class="st">Access Level Definitions</div>
+    <div class="st-line"></div>
+    <div class="card gold-accent" style="margin-bottom:14px">
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <div style="display:flex;align-items:center;gap:10px"><span class="level-badge level-admin">ADMIN</span><span style="font-size:11px;color:var(--text3)">Full system access · Dashboard · Controls · Analytics</span></div>
+        <div style="display:flex;align-items:center;gap:10px"><span class="level-badge level-moderator">MODERATOR</span><span style="font-size:11px;color:var(--text3)">View voters · Manage comments · No voting controls</span></div>
+        <div style="display:flex;align-items:center;gap:10px"><span class="level-badge level-voter">VOTER</span><span style="font-size:11px;color:var(--text3)">Vote · Wallet · Comments · Share</span></div>
+        <div style="display:flex;align-items:center;gap:10px"><span class="level-badge level-viewer">VIEWER</span><span style="font-size:11px;color:var(--text3)">View results only · No voting or wallet</span></div>
+      </div>
+    </div>
+    <div class="st">Manage User Levels</div>
+    <div class="st-line"></div>
+    <div id="accessList"></div>
   </div>
-  <div style="padding:13px;display:none" id="atab-log"><div class="st">Activity Log</div><div id="aLog"></div></div>
-  <div style="padding:13px;display:none" id="atab-rev">
-    <div class="st">Revenue per Contestant</div><div id="aRevDetail"></div>
-    <div style="background:var(--s1);border:1px solid var(--b1);border-radius:9px;padding:12px;margin-top:10px;display:flex;justify-content:space-between;align-items:center"><span style="font-weight:600;font-size:14px">Total Collected</span><span class="astat-n" id="a-revBig">Ksh 0</span></div>
+
+  <!-- CONTROLS -->
+  <div style="padding:14px;display:none" id="atab-ctrl">
+    <div class="ctrl-card">
+      <h4>🔄 Voting Status</h4>
+      <p>Open or close voting for all users in real-time.</p>
+      <div style="display:flex;align-items:center;gap:10px">
+        <button class="toggle on" id="vToggle" onclick="toggleVoting()"></button>
+        <span id="vStatusLbl" style="font-size:14px;font-weight:700;color:var(--gold2)">OPEN</span>
+      </div>
+    </div>
+    <div class="ctrl-card">
+      <h4>⏳ Extend Deadline</h4>
+      <p>Add hours to the current voting deadline.</p>
+      <div style="display:flex;gap:8px">
+        <input class="inp" id="extH" type="number" value="24" min="1" style="width:80px;padding:9px"/>
+        <button class="btn btn-gold" onclick="extendDL()">Add Hours</button>
+      </div>
+    </div>
+    <div class="ctrl-card">
+      <h4>🎯 Milestone Alert</h4>
+      <p>Display a banner when this vote count is reached.</p>
+      <div style="display:flex;gap:8px">
+        <input class="inp" id="msInp" type="number" value="100" style="width:90px;padding:9px"/>
+        <button class="btn btn-outline" onclick="setMS()">Set Milestone</button>
+      </div>
+    </div>
+    <div class="ctrl-card">
+      <h4>🔁 Reset All Votes</h4>
+      <p>Clears all votes permanently. Wallet balances are kept.</p>
+      <button class="btn btn-danger" onclick="resetVotes()">⚠ Reset All Votes</button>
+    </div>
+    <div style="margin-top:14px">
+      <button class="btn btn-ghost btn-full" onclick="adminLogout()">🚪 Logout</button>
+    </div>
+  </div>
+
+  <!-- ANALYTICS -->
+  <div style="padding:14px;display:none" id="atab-analytics">
+    <div class="st">Data Analytics</div>
+    <div class="st-line"></div>
+    <div class="agrid" style="margin-bottom:14px">
+      <div class="astat"><div class="astat-n" id="an-vph">0</div><div class="astat-l">Votes/Hour (avg)</div></div>
+      <div class="astat"><div class="astat-n" id="an-rpv">Ksh 0</div><div class="astat-l">Revenue/Voter</div></div>
+    </div>
+    <div class="card" style="margin-bottom:12px">
+      <div style="font-size:12px;font-weight:600;margin-bottom:10px;color:var(--gold2)">Vote Share by Contestant</div>
+      <div id="an-share"></div>
+    </div>
+    <div class="card" style="margin-bottom:12px">
+      <div style="font-size:12px;font-weight:600;margin-bottom:10px;color:var(--gold2)">Revenue Breakdown</div>
+      <div id="an-rev"></div>
+    </div>
+    <div class="card" style="margin-bottom:12px">
+      <div style="font-size:12px;font-weight:600;margin-bottom:10px;color:var(--gold2)">Voter Engagement Metrics</div>
+      <div id="an-engage"></div>
+    </div>
+    <div class="card">
+      <div style="font-size:12px;font-weight:600;margin-bottom:10px;color:var(--gold2)">Wallet Fund Flow</div>
+      <div id="an-wallet"></div>
+    </div>
   </div>
 </div>
 
 <!-- VOTE MODAL -->
-<div class="ov hidden" id="voteOv" onclick="closeVoteOv(event)">
-<div class="modal">
+<div class="modal-wrap" id="voteWrap" onclick="closeVoteOv(event)">
+<div class="modal-box">
   <div class="modal-handle"></div>
-  <h3 id="v-name" style="font-size:18px;margin-bottom:5px">Vote for</h3>
-  <p style="font-size:13px;color:var(--t2);margin-bottom:16px">Each vote = Ksh 10 from your wallet</p>
-  <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px">
-    <button style="width:34px;height:34px;border-radius:50%;border:1px solid var(--b2);background:var(--s2);color:var(--t1);font-size:18px;cursor:pointer" onclick="chQty(-1)">−</button>
-    <div style="font-family:'Syne',sans-serif;font-size:28px;font-weight:700;flex:1;text-align:center" id="qNum">1</div>
-    <button style="width:34px;height:34px;border-radius:50%;border:1px solid var(--b2);background:var(--s2);color:var(--t1);font-size:18px;cursor:pointer" onclick="chQty(1)">+</button>
+  <h3 id="v-name" style="font-size:19px;margin-bottom:4px;background:linear-gradient(135deg,var(--gold),var(--gold2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">Vote For</h3>
+  <p style="font-size:12px;color:var(--text3);margin-bottom:16px">Ksh 10 per vote · deducted from wallet</p>
+  <div style="display:flex;align-items:center;gap:14px;margin-bottom:14px">
+    <button style="width:36px;height:36px;border-radius:50%;border:1px solid rgba(201,168,76,.3);background:rgba(201,168,76,.08);color:var(--gold2);font-size:18px;cursor:pointer;transition:.2s;font-family:'Outfit',sans-serif" onclick="chQty(-1)">−</button>
+    <div style="font-family:'Playfair Display',serif;font-size:30px;font-weight:700;flex:1;text-align:center;background:linear-gradient(135deg,var(--gold),var(--gold2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text" id="qNum">1</div>
+    <button style="width:36px;height:36px;border-radius:50%;border:1px solid rgba(201,168,76,.3);background:rgba(201,168,76,.08);color:var(--gold2);font-size:18px;cursor:pointer;transition:.2s;font-family:'Outfit',sans-serif" onclick="chQty(1)">+</button>
   </div>
-  <div style="background:var(--s2);border-radius:9px;padding:11px;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center"><span style="font-size:13px;color:var(--t2)">Cost</span><span style="font-family:'Syne',sans-serif;font-size:20px;font-weight:700;color:var(--gold)" id="qCost">Ksh 10</span></div>
-  <div style="background:var(--s2);border-radius:9px;padding:11px;margin-bottom:14px;display:flex;justify-content:space-between;align-items:center"><span style="font-size:13px;color:var(--t2)">Wallet Balance</span><span style="font-size:14px;font-weight:600;color:var(--green)" id="qBal">Ksh 0</span></div>
-  <div class="err" id="v-err" style="display:none;margin-bottom:10px">Insufficient balance. Top up first!</div>
-  <button class="btn btn-green btn-full" onclick="submitVote()">✓ Vote Now</button>
-  <button class="btn btn-ghost btn-full" style="margin-top:7px" onclick="closeVoteModal()">Cancel</button>
+  <div style="background:rgba(201,168,76,.06);border:1px solid rgba(201,168,76,.15);border-radius:10px;padding:12px;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center">
+    <span style="font-size:12px;color:var(--text3)">Total Cost</span>
+    <span style="font-family:'Playfair Display',serif;font-size:22px;font-weight:700;background:linear-gradient(135deg,var(--gold),var(--gold2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text" id="qCost">Ksh 10</span>
+  </div>
+  <div style="background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:10px;padding:12px;margin-bottom:14px;display:flex;justify-content:space-between;align-items:center">
+    <span style="font-size:12px;color:var(--text3)">Wallet Balance</span>
+    <span style="font-size:14px;font-weight:600;color:var(--green)" id="qBal">Ksh 0</span>
+  </div>
+  <div class="err" id="v-err" style="margin-bottom:10px">Insufficient balance. Please top up your wallet first.</div>
+  <button class="btn btn-green btn-full" onclick="submitVote()">✓ Confirm Vote</button>
+  <button class="btn btn-ghost btn-full" style="margin-top:8px" onclick="closeVoteModal()">Cancel</button>
 </div>
 </div>
 
 <!-- WALLET MODAL -->
-<div class="ov hidden" id="walletOv" onclick="closeWalletOv(event)">
-<div class="modal">
+<div class="modal-wrap" id="walletWrap" onclick="closeWalletOv(event)">
+<div class="modal-box">
   <div class="modal-handle"></div>
-  <h3 id="wm-title" style="font-size:18px;margin-bottom:5px">Deposit via M-PESA</h3>
-  <p style="font-size:13px;color:var(--t2);margin-bottom:16px" id="wm-sub">STK push sent to your M-PESA number</p>
-  <div class="form-group"><label class="form-label">M-PESA Number</label><input class="inp" id="wm-phone" placeholder="0712345678" maxlength="13"/></div>
-  <div class="form-group"><label class="form-label">Amount (Ksh)</label><input class="inp" id="wm-amount" type="number" placeholder="100" min="10"/></div>
-  <div style="background:var(--s2);border-radius:9px;padding:10px;margin-bottom:14px;font-size:12px;color:var(--t2)">📲 M-PESA STK push will appear on your phone. Enter your PIN to confirm.</div>
-  <button class="btn btn-mpesa btn-full" id="wm-submit" onclick="submitWallet()">📲 Send STK Push</button>
-  <button class="btn btn-ghost btn-full" style="margin-top:7px" onclick="closeWalletModal()">Cancel</button>
+  <h3 id="wm-title" style="font-size:19px;margin-bottom:4px;background:linear-gradient(135deg,var(--gold),var(--gold2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">Deposit via M-PESA</h3>
+  <p style="font-size:12px;color:var(--text3);margin-bottom:16px" id="wm-sub">STK push will be sent to your M-PESA number</p>
+  <div class="fg"><label class="lbl">M-PESA Phone Number</label><input class="inp" id="wm-phone" placeholder="0712345678" maxlength="13"/></div>
+  <div class="fg"><label class="lbl">Amount (Ksh)</label><input class="inp" id="wm-amount" type="number" placeholder="100" min="10"/></div>
+  <div style="background:rgba(201,168,76,.05);border:1px solid rgba(201,168,76,.12);border-radius:8px;padding:10px 12px;margin-bottom:14px;font-size:11px;color:var(--text3);display:flex;align-items:flex-start;gap:8px">
+    <span style="color:var(--gold)">📱</span>
+    M-PESA STK push will appear on your phone. Enter your PIN to confirm. Funds credited instantly.
+  </div>
+  <button class="btn btn-gold btn-full" id="wm-submit" onclick="submitWallet()">📲 Send STK Push</button>
+  <button class="btn btn-ghost btn-full" style="margin-top:8px" onclick="closeWalletModal()">Cancel</button>
 </div>
 </div>
 
 <script>
 const CONTESTANTS=[
-  {id:'sam',name:'Sam Vidambu',color:'#F5A623',bg:'#3D2800',ini:'SV'},
-  {id:'kelly',name:'Kelly Inspiration',color:'#1ABC9C',bg:'#0D2A25',ini:'KI'},
-  {id:'elizabeth',name:'Pr. Elizabeth Mokoro',color:'#9B59B6',bg:'#1A0D2A',ini:'EM'},
-  {id:'wambugu',name:'Wambugu wa Kamau',color:'#E91E8C',bg:'#2A0D1A',ini:'WK'},
+  {id:'sam',name:'Sam Vidambu',ini:'SV'},
+  {id:'kelly',name:'Kelly Inspiration',ini:'KI'},
+  {id:'elizabeth',name:'Pr. Elizabeth Mokoro',ini:'EM'},
+  {id:'wambugu',name:'Wambugu wa Kamau',ini:'WK'},
 ];
 const ADMIN={user:'superadmin',pass:'UtuboraMentorsKE@2026'};
+const ADMIN_OTP='847291';
 
 let state={
   votes:{sam:0,kelly:0,elizabeth:0,wambugu:0},
@@ -391,157 +676,332 @@ let state={
   deadline:Date.now()+7*24*3600*1000,
   milestone:100,msFired:false,
   users:{},currentUser:null,
+  pendingUser:null,userOTP:null,otpExpiry:null,otpTimer:null,
 };
 
 function seedUsers(){
-  const demo=[
-    {fname:'Jane',lname:'Wanjiru',email:'jane@demo.ke',phone:'0712345678',pass:'demo123',wallet:250,txns:[{type:'deposit',amt:300,time:'09:20',ref:'M-PESA Deposit'},{type:'vote',amt:-50,time:'10:05',ref:'Vote: Kelly Inspiration (x5)'}],totalVotes:5,votedFor:'kelly'},
-    {fname:'Brian',lname:'Otieno',email:'brian@demo.ke',phone:'0722111222',pass:'demo123',wallet:80,txns:[{type:'deposit',amt:100,time:'08:50',ref:'M-PESA Deposit'},{type:'vote',amt:-20,time:'09:10',ref:'Vote: Sam Vidambu (x2)'}],totalVotes:2,votedFor:'sam'},
-    {fname:'Amina',lname:'Hassan',email:'amina@demo.ke',phone:'0733987654',pass:'demo123',wallet:150,txns:[{type:'deposit',amt:200,time:'07:40',ref:'M-PESA Deposit'},{type:'vote',amt:-50,time:'08:00',ref:'Vote: Pr. Elizabeth Mokoro (x5)'}],totalVotes:5,votedFor:'elizabeth'},
+  const users=[
+    {fn:'Brian',ln:'Otieno',email:'brian@demo.ke',phone:'0722111222',pass:'demo123',wallet:80,txns:[{type:'deposit',amt:100,time:'08:50',ref:'M-PESA Deposit'},{type:'vote',amt:-20,time:'09:10',ref:'Vote: Sam (x2)'}],totalVotes:2,votedFor:'sam',level:'voter',failedAttempts:0,locked:false},
+    {fn:'Amina',ln:'Hassan',email:'amina@demo.ke',phone:'0733987654',pass:'demo123',wallet:150,txns:[{type:'deposit',amt:200,time:'07:40',ref:'M-PESA Deposit'},{type:'vote',amt:-50,time:'08:00',ref:'Vote: Elizabeth (x5)'}],totalVotes:5,votedFor:'elizabeth',level:'moderator',failedAttempts:0,locked:false},
+    {fn:'Peter',ln:'Mwangi',email:'peter@demo.ke',phone:'0711222333',pass:'demo123',wallet:200,txns:[{type:'deposit',amt:200,time:'09:00',ref:'M-PESA Deposit'},{type:'vote',amt:-30,time:'09:30',ref:'Vote: Kelly (x3)'}],totalVotes:3,votedFor:'kelly',level:'voter',failedAttempts:0,locked:false},
   ];
-  demo.forEach(u=>{state.users[u.email]=u;state.votes[u.votedFor]+=u.totalVotes;state.hourly[u.votedFor]+=Math.ceil(u.totalVotes/2);for(let i=0;i<u.totalVotes;i++)state.actLog.unshift({name:u.fname+' '+u.lname,cid:u.votedFor,time:'0'+Math.floor(Math.random()*12)+':'+Math.floor(Math.random()*59).toString().padStart(2,'0')});});
+  users.forEach(u=>{
+    state.users[u.email]=u;
+    state.votes[u.votedFor]+=u.totalVotes;
+    state.hourly[u.votedFor]+=Math.ceil(u.totalVotes/2);
+    for(let i=0;i<u.totalVotes;i++)state.actLog.unshift({name:u.fn+' '+u.ln,cid:u.votedFor,time:'0'+Math.floor(Math.random()*9)+':'+Math.floor(Math.random()*59).toString().padStart(2,'0')});
+  });
   state.comments=[
-    {for:'sam',text:'Sam all the way! 🔥',name:'Jane W.',time:'10:42'},
-    {for:'kelly',text:'Kelly your energy is everything!',name:'Brian O.',time:'10:55'},
+    {for:'sam',text:'Sam all the way! 🔥',name:'Brian O.',time:'10:42'},
+    {for:'kelly',text:'Kelly your energy is everything!',name:'Peter M.',time:'10:55'},
     {for:'elizabeth',text:'Pr. Elizabeth is a true leader!',name:'Amina H.',time:'11:03'},
     {for:'wambugu',text:'Wambugu anaendelea! 💪',name:'Anonymous',time:'11:15'},
   ];
 }
 seedUsers();
 
+/* AUTH */
 function switchTab(t){
-  document.getElementById('tab-signin').classList.toggle('active',t==='signin');
-  document.getElementById('tab-signup').classList.toggle('active',t==='signup');
+  document.getElementById('t-signin').classList.toggle('active',t==='signin');
+  document.getElementById('t-signup').classList.toggle('active',t==='signup');
   document.getElementById('form-signin').style.display=t==='signin'?'block':'none';
   document.getElementById('form-signup').style.display=t==='signup'?'block':'none';
 }
 
-function doSignup(){
-  const fn=v('su-fname'),ln=v('su-lname'),em=v('su-email'),ph=v('su-phone'),pw=v('su-pass');
-  if(!fn||!ln||!em||!ph||!pw){showErr('su-err','Fill in all fields.');return;}
-  if(pw.length<6){showErr('su-err','Password must be at least 6 characters.');return;}
-  if(state.users[em]){showErr('su-err','Email already registered.');return;}
-  if(!/^07\d{8}$/.test(ph)){showErr('su-err','Enter valid Safaricom number (07XXXXXXXX).');return;}
-  state.users[em]={fname:fn,lname:ln,email:em,phone:ph,pass:pw,wallet:0,txns:[],totalVotes:0,votedFor:null};
-  loginUser(em);toast('✓ Welcome, '+fn+'! Account created.','ok');
-}
-
 function doLogin(){
   const em=v('li-email'),pw=v('li-pass');
-  if(!em||!pw){showErr('li-err','Enter email and password.');return;}
+  if(!em||!pw){showErr('li-err','Please enter your email and password.');return;}
   const u=state.users[em];
-  if(!u||u.pass!==pw){showErr('li-err','Incorrect email or password.');return;}
-  loginUser(em);toast('✓ Welcome back, '+u.fname+'!','ok');
+  if(!u){showErr('li-err','No account found with this email.');return;}
+  if(u.locked){showErr('li-err','Account locked. Contact admin to unlock.');return;}
+  if(u.pass!==pw){
+    u.failedAttempts=(u.failedAttempts||0)+1;
+    if(u.failedAttempts>=5){u.locked=true;showErr('li-err','Account locked — 5 failed attempts.');return;}
+    showErr('li-err',`Incorrect password. ${5-u.failedAttempts} attempt(s) remaining.`);return;
+  }
+  u.failedAttempts=0;
+  state.pendingUser=em;
+  send2FA(u);
+}
+
+function doSignup(){
+  const fn=v('su-fn'),ln=v('su-ln'),em=v('su-em'),ph=v('su-ph'),pw=v('su-pw');
+  if(!fn||!ln||!em||!ph||!pw){showErr('su-err','Please fill in all fields.');return;}
+  if(pw.length<6){showErr('su-err','Password must be at least 6 characters.');return;}
+  if(state.users[em]){showErr('su-err','This email is already registered.');return;}
+  if(!/^07\d{8}$/.test(ph)){showErr('su-err','Enter a valid Safaricom number (07XXXXXXXX).');return;}
+  state.users[em]={fn,ln,email:em,phone:ph,pass:pw,wallet:0,txns:[],totalVotes:0,votedFor:null,level:'voter',failedAttempts:0,locked:false};
+  state.pendingUser=em;
+  send2FA(state.users[em]);
 }
 
 function googleSignIn(){
   const email='google.user@gmail.com';
-  if(!state.users[email])state.users[email]={fname:'Google',lname:'User',email,phone:'0700000000',pass:'__g__',wallet:100,txns:[{type:'deposit',amt:100,time:new Date().toLocaleTimeString(),ref:'Google Sign-In Bonus'}],totalVotes:0,votedFor:null};
-  loginUser(email);toast('✓ Signed in with Google!','ok');
+  if(!state.users[email])state.users[email]={fn:'Google',ln:'User',email,phone:'0700000000',pass:'__g__',wallet:100,txns:[{type:'deposit',amt:100,time:new Date().toLocaleTimeString(),ref:'Sign-In Bonus'}],totalVotes:0,votedFor:null,level:'voter',failedAttempts:0,locked:false};
+  state.pendingUser=email;
+  send2FA(state.users[email]);
+}
+
+function send2FA(u){
+  state.userOTP=Math.floor(100000+Math.random()*900000).toString();
+  state.otpExpiry=Date.now()+5*60*1000;
+  document.getElementById('tfa-dest').textContent=u.phone?u.phone.slice(0,4)+'***'+u.phone.slice(-3):u.email;
+  clearOTPBoxes('otp-row');
+  startOTPTimer();
+  showPage('2fa');
+  toast('Code: '+state.userOTP+' (simulated SMS)','ok');
+}
+
+function startOTPTimer(){
+  if(state.otpTimer)clearInterval(state.otpTimer);
+  const el=document.getElementById('otp-timer');
+  function upd(){const left=Math.max(0,state.otpExpiry-Date.now());const m=Math.floor(left/60000),s=Math.floor((left%60000)/1000);if(el)el.textContent=m+':'+(s<10?'0':'')+s;if(left<=0){clearInterval(state.otpTimer);showErr('otp-err','Code expired. Request a new one.');}}
+  upd();state.otpTimer=setInterval(upd,1000);
+}
+
+function verifyOTP(){
+  const boxes=document.querySelectorAll('#otp-row .otp-box');
+  const code=Array.from(boxes).map(b=>b.value).join('');
+  if(code.length<6){showErr('otp-err','Please enter all 6 digits.');return;}
+  if(Date.now()>state.otpExpiry){showErr('otp-err','Code expired. Click Resend.');return;}
+  if(code!==state.userOTP){showErr('otp-err','Incorrect code. Please try again.');return;}
+  clearInterval(state.otpTimer);
+  loginUser(state.pendingUser);
+  toast('✓ Verified! Welcome to UtuboraMentorsKE','ok');
+}
+
+function resendOTP(){const u=state.users[state.pendingUser];if(u)send2FA(u);}
+
+function otpMove(el,idx){
+  const boxes=document.querySelectorAll('#otp-row .otp-box');
+  el.value=el.value.replace(/\D/,'');
+  if(el.value&&idx<5)boxes[idx+1].focus();
+  if(Array.from(boxes).every(b=>b.value))verifyOTP();
+}
+function otpBack(e,idx){if(e.key==='Backspace'){const boxes=document.querySelectorAll('#otp-row .otp-box');if(!boxes[idx].value&&idx>0)boxes[idx-1].focus();}}
+function clearOTPBoxes(rowId){document.querySelectorAll('#'+rowId+' .otp-box').forEach(b=>b.value='');}
+
+function adminLogin(){
+  const u=v('adm-u'),p=v('adm-p');
+  if(u===ADMIN.user&&p===ADMIN.pass){
+    document.getElementById('adm-err').style.display='none';
+    document.getElementById('adm-otp-hint').textContent='Demo code: '+ADMIN_OTP;
+    clearOTPBoxes('adm-otp-row');
+    showPage('admin-2fa');
+  } else {
+    showErr('adm-err','Incorrect admin credentials.');
+  }
+}
+
+function admOtpMove(el,idx){
+  const boxes=document.querySelectorAll('#adm-otp-row .otp-box');
+  el.value=el.value.replace(/\D/,'');
+  if(el.value&&idx<5)boxes[idx+1].focus();
+  if(Array.from(boxes).every(b=>b.value))verifyAdminOTP();
+}
+function admOtpBack(e,idx){if(e.key==='Backspace'){const boxes=document.querySelectorAll('#adm-otp-row .otp-box');if(!boxes[idx].value&&idx>0)boxes[idx-1].focus();}}
+
+function verifyAdminOTP(){
+  const boxes=document.querySelectorAll('#adm-otp-row .otp-box');
+  const code=Array.from(boxes).map(b=>b.value).join('');
+  if(code.length<6){showErr('adm-otp-err','Enter all 6 digits.');return;}
+  if(code!==ADMIN_OTP){showErr('adm-otp-err','Incorrect admin code.');return;}
+  showPage('admin');renderAdminAll();
+  toast('✓ Admin access granted','ok');
 }
 
 function loginUser(email){state.currentUser=email;updateNav();showPage('voter');renderAll();}
 function logout(){state.currentUser=null;updateNav();showPage('auth');}
-function adminLogin(){const u=v('adm-user'),p=v('adm-pass');if(u===ADMIN.user&&p===ADMIN.pass){document.getElementById('adm-err').style.display='none';showPage('admin');renderAdminAll();}else showErr('adm-err','Incorrect admin credentials.');}
 function adminLogout(){showPage('voter');}
 
 function updateNav(){
-  const nr=document.getElementById('navRight'),ws=document.getElementById('walletStrip');
+  const nr=document.getElementById('navRight'),ws=document.getElementById('wstrip');
   if(state.currentUser){
     const u=state.users[state.currentUser];
-    const ini=(u.fname[0]+u.lname[0]).toUpperCase();
-    nr.innerHTML=`<div class="user-chip" onclick="showPage('wallet')"><div class="av" style="width:22px;height:22px;font-size:9px;background:var(--gold-bg);color:var(--gold)">${ini}</div><span>Ksh ${u.wallet}</span></div><button class="btn btn-ghost btn-sm" onclick="logout()">Logout</button>`;
-    ws.style.display='flex';
-    document.getElementById('ws-bal').textContent='Ksh '+u.wallet;
+    const ini=(u.fn[0]+u.ln[0]).toUpperCase();
+    nr.innerHTML=`<div class="live-pill"><span class="ldot"></span>LIVE</div><div class="user-chip" onclick="showPage('wallet')"><div class="av" style="width:24px;height:24px;font-size:9px;font-weight:700">${ini}</div><span>Ksh ${u.wallet}</span></div><button class="btn btn-ghost btn-sm" onclick="logout()">Logout</button>`;
+    ws.style.display='flex';document.getElementById('ws-bal').textContent='Ksh '+u.wallet;
   } else {
-    nr.innerHTML=`<button class="btn btn-ghost btn-sm" onclick="showPage('auth')">Sign In</button>`;
+    nr.innerHTML=`<div class="live-pill"><span class="ldot"></span>LIVE</div><button class="btn btn-outline btn-sm" onclick="showPage('auth')">Sign In</button>`;
     ws.style.display='none';
   }
 }
 
+/* VOTING LOGIC */
 function totalV(){return Object.values(state.votes).reduce((a,b)=>a+b,0);}
 function totalRev(){return totalV()*10;}
 function sortedC(){return [...CONTESTANTS].sort((a,b)=>state.votes[b.id]-state.votes[a.id]);}
 
+// VOTERS: see results + vote button (if logged in)
+// VIEWERS: see results only
 function renderContestants(){
   const tot=totalV()||1,sorted=sortedC();
   const hotId=Object.entries(state.hourly).sort((a,b)=>b[1]-a[1])[0][0];
-  const rkcols=[sorted[0]?.color,'#C0C0C0','#CD7F32','#666'];
+  const rankLabels=['1st','2nd','3rd','4th'];
+  const isLoggedIn=!!state.currentUser;
+  const userLevel=isLoggedIn?state.users[state.currentUser].level:'viewer';
+  const canVote=isLoggedIn&&userLevel!=='viewer'&&state.votingOpen;
+
   document.getElementById('clist').innerHTML=sorted.map((c,i)=>{
     const pct=Math.round(state.votes[c.id]/tot*100),isLead=i===0,isHot=c.id===hotId&&state.votes[c.id]>0;
-    return `<div class="card${isLead?' highlight':''}">
-      <div style="display:flex;align-items:center;gap:11px;margin-bottom:9px">
-        <div class="av" style="width:46px;height:46px;font-size:17px;background:${c.bg};color:${c.color}">${c.ini}</div>
-        <div style="flex:1"><div style="font-family:'Syne',sans-serif;font-size:14px;font-weight:700">${c.name}${isHot?`<span style="background:#3D1500;color:#FF6B35;padding:2px 7px;border-radius:10px;font-size:10px;font-weight:600;margin-left:5px;font-family:'DM Sans',sans-serif">🔥 Hot</span>`:''}</div><div style="font-size:11px;color:var(--t2)">${state.votes[c.id]} votes · Ksh ${state.votes[c.id]*10}</div></div>
-        <div style="font-family:'Syne',sans-serif;font-size:21px;font-weight:800;color:${rkcols[i]}">#${i+1}</div>
+    const rankColors=['var(--gold2)','#C0C0C0','#CD7F32','var(--text3)'];
+    return `<div class="vcard${isLead?' lead':''}">
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:10px">
+        <div class="av" style="width:46px;height:46px;font-size:15px;font-weight:800">${c.ini}</div>
+        <div style="flex:1;min-width:0">
+          <div style="font-family:'Playfair Display',serif;font-size:14px;font-weight:700;display:flex;align-items:center;gap:6px;flex-wrap:wrap">
+            ${c.name}
+            ${isHot?`<span style="background:rgba(201,168,76,.15);color:var(--gold);padding:1px 7px;border-radius:10px;font-size:9px;font-weight:700;font-family:'Outfit',sans-serif;letter-spacing:.5px;border:1px solid rgba(201,168,76,.25)">HOT 🔥</span>`:''}
+          </div>
+          <div style="font-size:10px;color:var(--text3);margin-top:2px">${state.votes[c.id]} votes · Ksh ${state.votes[c.id]*10} raised</div>
+        </div>
+        <div style="font-family:'Playfair Display',serif;font-size:16px;font-weight:900;color:${rankColors[i]};flex-shrink:0">#${i+1}</div>
       </div>
-      <div style="display:flex;align-items:center;gap:7px;margin-bottom:9px"><div class="pb" style="flex:1"><div class="pf" style="width:${pct}%;background:${c.color}"></div></div><div style="font-size:12px;font-weight:600;color:${c.color};min-width:34px;text-align:right">${pct}%</div></div>
-      <div style="display:flex;align-items:center;gap:7px"><div style="flex:1;font-size:12px;color:var(--t2)">Ksh ${state.votes[c.id]*10} raised</div><button class="btn btn-gold btn-sm" onclick="openVoteModal('${c.id}')" ${!state.votingOpen?'disabled':''}>🗳️ Vote</button></div>
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
+        <div class="pb" style="flex:1"><div class="pf" style="width:${pct}%"></div></div>
+        <div style="font-size:12px;font-weight:700;color:var(--gold2);min-width:34px;text-align:right">${pct}%</div>
+      </div>
+      ${canVote?`<div style="text-align:right"><button class="btn btn-gold btn-sm" onclick="openVoteModal('${c.id}')">Vote</button></div>`:''}
+      ${isLoggedIn&&userLevel==='viewer'?`<div style="text-align:right;font-size:10px;color:var(--text4);font-style:italic">Viewer mode — contact admin to vote</div>`:''}
+      ${!isLoggedIn?`<div style="text-align:right"><button class="btn btn-outline btn-sm" onclick="showPage('auth')">Sign in to vote</button></div>`:''}
     </div>`;
   }).join('');
 }
 
 function renderStats(){
   const tv=totalV(),tr=totalRev(),vu=Object.keys(state.users).length;
-  ['tv'].forEach(id=>{const e=document.getElementById(id);if(e)e.textContent=tv;});
-  ['tr'].forEach(id=>{const e=document.getElementById(id);if(e)e.textContent=tr;});
-  ['vc'].forEach(id=>{const e=document.getElementById(id);if(e)e.textContent=vu;});
+  const e1=document.getElementById('tv');if(e1)e1.textContent=tv;
+  const e2=document.getElementById('tr');if(e2)e2.textContent=tr;
+  const e3=document.getElementById('vc');if(e3)e3.textContent=vu;
 }
 
 function renderTicker(){
-  const sorted=sortedC(),medals=['🥇','🥈','🥉','4️⃣'];
-  const el=document.getElementById('ticker');if(el)el.innerHTML=sorted.map((c,i)=>`<div class="ticker-item"><span>${medals[i]}</span><span style="font-weight:600">${c.name.split(' ')[0]}</span><span style="color:${c.color};font-weight:700">${state.votes[c.id]}</span></div>`).join('');
+  const sorted=sortedC(),medals=['🥇','🥈','🥉','4th'];
+  const el=document.getElementById('ticker');
+  if(el)el.innerHTML=sorted.map((c,i)=>`<div class="t-item"><span class="t-rank">${medals[i]}</span><span style="font-weight:600;color:var(--text2)">${c.name.split(' ')[0]}</span><span style="background:linear-gradient(135deg,var(--gold),var(--gold2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;font-weight:700">${state.votes[c.id]}v</span></div>`).join('');
 }
 
 function renderCmts(){
-  const colors={sam:'#F5A623',kelly:'#1ABC9C',elizabeth:'#9B59B6',wambugu:'#E91E8C'};
   const sel=document.getElementById('cmt-for');
   if(sel&&sel.children.length<2)CONTESTANTS.forEach(c=>{const o=document.createElement('option');o.value=c.id;o.textContent=c.name;sel.appendChild(o);});
-  const el=document.getElementById('cmtList');if(el)el.innerHTML=state.comments.map(c=>`<div class="cmt-card"><div style="display:flex;align-items:center;gap:7px;margin-bottom:4px"><div style="width:7px;height:7px;border-radius:50%;background:${colors[c.for]||'#888'};flex-shrink:0"></div><div style="font-size:12px;font-weight:600">${c.name}</div><div style="font-size:10px;color:${colors[c.for]||'#888'};margin-left:2px">for ${CONTESTANTS.find(x=>x.id===c.for)?.name.split(' ')[0]||''}</div><div style="font-size:11px;color:var(--t3);margin-left:auto">${c.time}</div></div><div style="font-size:13px;color:var(--t2)">${c.text}</div></div>`).join('')||'<div style="color:var(--t3);font-size:13px">No messages yet.</div>';
+  const el=document.getElementById('cmtList');
+  if(el)el.innerHTML=state.comments.map(c=>{
+    const cn=CONTESTANTS.find(x=>x.id===c.for);
+    return `<div class="cmt-card"><div style="display:flex;align-items:center;gap:7px;margin-bottom:4px"><div style="width:5px;height:5px;border-radius:50%;background:var(--gold);flex-shrink:0"></div><div style="font-size:11px;font-weight:600;color:var(--text2)">${c.name}</div><div style="font-size:9px;color:var(--gold-dim);text-transform:uppercase;letter-spacing:.4px;font-weight:600">for ${cn?.name.split(' ')[0]||''}</div><div style="font-size:10px;color:var(--text4);margin-left:auto">${c.time}</div></div><div style="font-size:12px;color:var(--text)">${c.text}</div></div>`;
+  }).join('')||'<div style="color:var(--text4);font-size:12px;padding:12px 0">No messages yet.</div>';
 }
 
 function renderWallet(){
   if(!state.currentUser)return;
   const u=state.users[state.currentUser];
   const eb=document.getElementById('wbal');if(eb)eb.textContent='Ksh '+u.wallet;
-  const ep=document.getElementById('wphone');if(ep)ep.textContent=u.phone+' · '+u.fname+' '+u.lname;
+  const ep=document.getElementById('wphone');if(ep)ep.textContent=u.phone+' · '+u.fn+' '+u.ln;
   updateNav();
   const txEl=document.getElementById('txList');if(!txEl)return;
-  txEl.innerHTML=u.txns.slice().reverse().map(tx=>{const isPos=tx.type==='deposit';const icon=tx.type==='deposit'?'dep':tx.type==='vote'?'vot':'wit';const emoji=tx.type==='deposit'?'⬇':tx.type==='vote'?'🗳':'⬆';return `<div class="tx-item"><div class="tx-icon ${icon}">${emoji}</div><div style="flex:1"><div style="font-size:13px;font-weight:500">${tx.ref}</div><div style="font-size:11px;color:var(--t3)">${tx.time}</div></div><div class="tx-amt ${isPos?'pos':'neg'}" style="font-size:13px;font-weight:600">${isPos?'+':''} Ksh ${Math.abs(tx.amt)}</div></div>`;}).join('')||'<div style="color:var(--t3);font-size:13px;padding:16px 0">No transactions yet. Top up to get started!</div>';
+  txEl.innerHTML=u.txns.slice().reverse().map(tx=>{
+    const isPos=tx.type==='deposit';
+    const emoji=tx.type==='deposit'?'↓':tx.type==='vote'?'✓':'↑';
+    const iconBg=tx.type==='deposit'?'rgba(46,204,113,.1)':tx.type==='vote'?'rgba(201,168,76,.1)':'rgba(231,76,60,.1)';
+    return `<div class="tx-item"><div class="tx-icon" style="background:${iconBg}">${emoji}</div><div style="flex:1"><div style="font-size:12px;font-weight:500;color:var(--text)">${tx.ref}</div><div style="font-size:10px;color:var(--text3)">${tx.time}</div></div><div class="${isPos?'tx-pos':'tx-neg'}" style="font-size:13px;font-weight:600">${isPos?'+':''} Ksh ${Math.abs(tx.amt)}</div></div>`;
+  }).join('')||'<div style="color:var(--text4);font-size:12px;padding:14px 0">No transactions yet.</div>';
 }
 
+/* ADMIN RENDER */
 function renderAdminAll(){
   const tv=totalV(),tr=totalRev(),vu=Object.keys(state.users).length,wt=Object.values(state.users).reduce((a,u)=>a+u.wallet,0);
   ['a-tv'].forEach(id=>{const e=document.getElementById(id);if(e)e.textContent=tv;});
-  ['a-rev','a-revBig'].forEach(id=>{const e=document.getElementById(id);if(e)e.textContent='Ksh '+tr;});
+  ['a-rev'].forEach(id=>{const e=document.getElementById(id);if(e)e.textContent='Ksh '+tr;});
   ['a-vu'].forEach(id=>{const e=document.getElementById(id);if(e)e.textContent=vu;});
-  ['a-wt'].forEach(id=>{const e=document.getElementById(id);if(e)e.textContent='Ksh '+wt;});
+  ['a-wt','a-wtBig'].forEach(id=>{const e=document.getElementById(id);if(e)e.textContent='Ksh '+wt;});
+
   const sorted=sortedC(),tot=tv||1;
-  const aDist=document.getElementById('aDist');if(aDist)aDist.innerHTML=sorted.map(c=>{const pct=Math.round(state.votes[c.id]/tot*100);return `<div class="cbr"><div class="cbl">${c.name.split(' ')[0]}</div><div class="cbt"><div class="cbf" style="width:${pct}%;background:${c.color};color:${pct>18?'#000':'transparent'}">${pct}%</div></div><div class="cbv">${state.votes[c.id]}</div></div>`;}).join('');
-  const aLboard=document.getElementById('aLboard');const medals=['🥇','🥈','🥉','4️⃣'];if(aLboard)aLboard.innerHTML=sorted.map((c,i)=>`<div style="display:flex;align-items:center;gap:9px;padding:7px 0;border-bottom:1px solid var(--b1)"><span style="font-size:16px">${medals[i]}</span><div class="av" style="width:30px;height:30px;font-size:12px;background:${c.bg};color:${c.color}">${c.ini}</div><div style="flex:1"><div style="font-size:13px;font-weight:600">${c.name}</div><div style="font-size:10px;color:var(--t2)">${Math.round(state.votes[c.id]/tot*100)}%</div></div><div style="text-align:right"><div style="font-family:'Syne',sans-serif;font-weight:700;color:var(--gold)">${state.votes[c.id]}</div><div style="font-size:10px;color:var(--t2)">Ksh ${state.votes[c.id]*10}</div></div></div>`).join('');
-  const vTbl=document.getElementById('vTbl');if(vTbl)vTbl.innerHTML=Object.values(state.users).map(u=>`<tr><td>${u.fname} ${u.lname}</td><td style="color:var(--t2)">${u.email}</td><td>${u.totalVotes}</td><td>Ksh ${u.wallet}</td><td><span style="background:var(--green-bg);color:var(--green);padding:2px 6px;border-radius:6px;font-size:10px">Active</span></td></tr>`).join('')||'<tr><td colspan="5" style="color:var(--t3);padding:10px">No users</td></tr>';
-  const wAdmin=document.getElementById('walletAdmin');if(wAdmin)wAdmin.innerHTML=Object.values(state.users).map(u=>`<div style="display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--b1)"><div class="av" style="width:34px;height:34px;font-size:13px;background:var(--gold-bg);color:var(--gold)">${(u.fname[0]+u.lname[0]).toUpperCase()}</div><div style="flex:1"><div style="font-size:13px;font-weight:600">${u.fname} ${u.lname}</div><div style="font-size:11px;color:var(--t2)">${u.phone}</div></div><div style="text-align:right"><div style="font-family:'Syne',sans-serif;font-weight:700;color:var(--gold)">Ksh ${u.wallet}</div><div style="font-size:10px;color:var(--t2)">${u.txns.length} txns</div></div></div>`).join('');
-  const aLog=document.getElementById('aLog');if(aLog)aLog.innerHTML=state.actLog.slice(0,30).map(a=>{const c=CONTESTANTS.find(x=>x.id===a.cid);return `<div style="display:flex;gap:9px;padding:7px 0;border-bottom:1px solid var(--b1)"><div style="width:7px;height:7px;border-radius:50%;background:${c?.color||'#888'};margin-top:4px;flex-shrink:0"></div><div style="flex:1"><div style="font-size:12px;color:var(--t2)">${a.name} voted for <strong style="color:${c?.color}">${c?.name||a.cid}</strong></div><div style="font-size:10px;color:var(--t3)">${a.time}</div></div></div>`;}).join('')||'<div style="color:var(--t3);font-size:12px">No activity yet</div>';
-  const aRev=document.getElementById('aRevDetail');if(aRev)aRev.innerHTML=sorted.map(c=>`<div style="display:flex;align-items:center;gap:10px;background:var(--s1);border:1px solid var(--b1);border-radius:9px;padding:11px;margin-bottom:7px"><div class="av" style="width:34px;height:34px;font-size:13px;background:${c.bg};color:${c.color}">${c.ini}</div><div style="flex:1"><div style="font-size:13px;font-weight:600">${c.name}</div><div style="font-size:11px;color:var(--t2)">${state.votes[c.id]} votes</div></div><div style="font-family:'Syne',sans-serif;font-size:17px;font-weight:700;color:var(--gold)">Ksh ${state.votes[c.id]*10}</div></div>`).join('');
+
+  const aDist=document.getElementById('aDist');
+  if(aDist)aDist.innerHTML=sorted.map(c=>{const pct=Math.round(state.votes[c.id]/tot*100);return `<div class="bar-row"><div class="bar-lbl">${c.name.split(' ')[0]}</div><div class="bar-track"><div class="bar-fill" style="width:${pct}%;min-width:${pct>0?20:0}px">${pct>12?pct+'%':''}</div></div><div class="bar-val">${state.votes[c.id]}</div></div>`;}).join('');
+
+  const medals=['🥇','🥈','🥉','4️⃣'];
+  const aLboard=document.getElementById('aLboard');
+  if(aLboard)aLboard.innerHTML=sorted.map((c,i)=>`<div style="display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid rgba(201,168,76,.08)"><span style="font-size:15px">${medals[i]}</span><div class="av" style="width:30px;height:30px;font-size:11px">${c.ini}</div><div style="flex:1"><div style="font-size:12px;font-weight:600;color:var(--text)">${c.name}</div><div style="font-size:10px;color:var(--text3)">${Math.round(state.votes[c.id]/tot*100)}%</div></div><div style="text-align:right"><div style="font-family:'Playfair Display',serif;font-weight:700;background:linear-gradient(135deg,var(--gold),var(--gold2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">${state.votes[c.id]}</div><div style="font-size:10px;color:var(--text3)">Ksh ${state.votes[c.id]*10}</div></div></div>`).join('');
+
+  const vTbl=document.getElementById('vTbl');
+  if(vTbl)vTbl.innerHTML=Object.values(state.users).map(u=>`<tr><td style="color:var(--text)">${u.fn} ${u.ln}</td><td style="color:var(--text3)">${u.email}</td><td style="color:var(--text2)">${u.totalVotes}</td><td style="color:var(--green)">Ksh ${u.wallet}</td><td><span class="level-badge level-${u.level}">${u.level.toUpperCase()}</span></td></tr>`).join('')||'<tr><td colspan="5" style="color:var(--text4);padding:10px">No users yet</td></tr>';
+
+  const wAdmin=document.getElementById('walletAdmin');
+  if(wAdmin)wAdmin.innerHTML=Object.values(state.users).map(u=>`<div style="display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid rgba(201,168,76,.08)"><div class="av" style="width:34px;height:34px;font-size:12px">${(u.fn[0]+u.ln[0]).toUpperCase()}</div><div style="flex:1"><div style="font-size:12px;font-weight:600;color:var(--text)">${u.fn} ${u.ln}</div><div style="font-size:10px;color:var(--text3)">${u.phone} · <span class="level-badge level-${u.level}" style="padding:1px 5px;font-size:9px">${u.level.toUpperCase()}</span></div></div><div style="text-align:right"><div style="font-family:'Playfair Display',serif;font-weight:700;background:linear-gradient(135deg,var(--gold),var(--gold2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">Ksh ${u.wallet}</div><div style="font-size:10px;color:var(--text3)">${u.txns.length} txns</div></div></div>`).join('');
+
+  renderAccessList();renderAnalytics();
+}
+
+function renderAccessList(){
+  const el=document.getElementById('accessList');if(!el)return;
+  el.innerHTML=Object.values(state.users).map(u=>`<div class="card" style="margin-bottom:10px">
+    <div style="display:flex;align-items:center;gap:9px;margin-bottom:10px">
+      <div class="av" style="width:32px;height:32px;font-size:12px">${(u.fn[0]+u.ln[0]).toUpperCase()}</div>
+      <div style="flex:1"><div style="font-size:12px;font-weight:600;color:var(--text)">${u.fn} ${u.ln}</div><div style="font-size:10px;color:var(--text3)">${u.email}</div></div>
+      <span class="level-badge level-${u.level}">${u.level.toUpperCase()}</span>
+    </div>
+    <div style="display:flex;gap:6px;flex-wrap:wrap">
+      ${['voter','moderator','admin','viewer'].map(lv=>`<button class="btn btn-sm ${u.level===lv?'btn-gold':'btn-ghost'}" style="font-size:10px;padding:4px 10px" onclick="setLevel('${u.email}','${lv}')">${lv}</button>`).join('')}
+    </div>
+  </div>`).join('')||'<div style="color:var(--text4);font-size:12px">No users yet</div>';
+}
+
+function setLevel(email,level){
+  if(state.users[email]){state.users[email].level=level;renderAdminAll();toast('✓ '+state.users[email].fn+' set to '+level.toUpperCase(),'ok');}
+}
+
+function renderAnalytics(){
+  const tv=totalV(),tr=totalRev(),vu=Object.keys(state.users).length||1;
+  const wt=Object.values(state.users).reduce((a,u)=>a+u.wallet,0);
+  const totalDep=Object.values(state.users).reduce((a,u)=>a+u.txns.filter(t=>t.type==='deposit').reduce((s,t)=>s+t.amt,0),0);
+  const totalWit=Object.values(state.users).reduce((a,u)=>a+Math.abs(u.txns.filter(t=>t.type==='withdraw').reduce((s,t)=>s+t.amt,0)),0);
+  const elVPH=document.getElementById('an-vph');if(elVPH)elVPH.textContent=Math.round(tv/Math.max(1,7));
+  const elRPV=document.getElementById('an-rpv');if(elRPV)elRPV.textContent='Ksh '+Math.round(tr/vu);
+  const sorted=sortedC(),tot=tv||1;
+  const anShare=document.getElementById('an-share');
+  if(anShare)anShare.innerHTML=sorted.map(c=>{const pct=Math.round(state.votes[c.id]/tot*100);return `<div class="bar-row"><div class="bar-lbl">${c.name.split(' ')[0]}</div><div class="bar-track"><div class="bar-fill" style="width:${pct}%;min-width:${pct>0?20:0}px">${pct>12?pct+'%':''}</div></div><div class="bar-val">${pct}%</div></div>`;}).join('');
+  const anRev=document.getElementById('an-rev');
+  if(anRev)anRev.innerHTML=sorted.map(c=>{const pct=tv>0?Math.round(state.votes[c.id]/tot*100):0;return `<div class="bar-row"><div class="bar-lbl">${c.name.split(' ')[0]}</div><div class="bar-track"><div class="bar-fill" style="width:${pct}%;min-width:${pct>0?20:0}px">${pct>12?'Ksh '+(state.votes[c.id]*10):''}</div></div><div class="bar-val" style="color:var(--gold2)">Ksh ${state.votes[c.id]*10}</div></div>`;}).join('')+`<div style="margin-top:10px;padding-top:10px;border-top:1px solid rgba(201,168,76,.1);display:flex;justify-content:space-between;font-size:11px"><span style="color:var(--text3)">Total Revenue</span><span style="font-weight:700;background:linear-gradient(135deg,var(--gold),var(--gold2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">Ksh ${tr}</span></div>`;
+  const anEngage=document.getElementById('an-engage');
+  if(anEngage){
+    const avgVotes=(tv/vu).toFixed(1);
+    const walletUsers=Object.values(state.users).filter(u=>u.wallet>0).length;
+    anEngage.innerHTML=`<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+      <div style="background:rgba(255,255,255,.03);border-radius:8px;padding:10px;text-align:center"><div class="astat-n" style="font-size:18px">${avgVotes}</div><div class="astat-l">Avg votes/user</div></div>
+      <div style="background:rgba(255,255,255,.03);border-radius:8px;padding:10px;text-align:center"><div class="astat-n" style="font-size:18px">${walletUsers}</div><div class="astat-l">Funded wallets</div></div>
+      <div style="background:rgba(255,255,255,.03);border-radius:8px;padding:10px;text-align:center"><div class="astat-n" style="font-size:18px">${Object.values(state.users).filter(u=>u.totalVotes>0).length}</div><div class="astat-l">Active voters</div></div>
+      <div style="background:rgba(255,255,255,.03);border-radius:8px;padding:10px;text-align:center"><div class="astat-n" style="font-size:18px">${state.actLog.length}</div><div class="astat-l">Total actions</div></div>
+    </div>`;
+  }
+  const anWallet=document.getElementById('an-wallet');
+  if(anWallet)anWallet.innerHTML=`<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+    <div style="background:rgba(46,204,113,.05);border-radius:8px;padding:10px;text-align:center"><div style="font-family:'Playfair Display',serif;font-size:16px;font-weight:700;color:var(--green)">Ksh ${totalDep}</div><div class="astat-l">Deposited</div></div>
+    <div style="background:rgba(231,76,60,.05);border-radius:8px;padding:10px;text-align:center"><div style="font-family:'Playfair Display',serif;font-size:16px;font-weight:700;color:var(--red)">Ksh ${totalWit}</div><div class="astat-l">Withdrawn</div></div>
+    <div style="background:rgba(201,168,76,.05);border-radius:8px;padding:10px;text-align:center"><div class="astat-n" style="font-size:16px">Ksh ${tr}</div><div class="astat-l">Spent on votes</div></div>
+    <div style="background:rgba(243,156,18,.05);border-radius:8px;padding:10px;text-align:center"><div style="font-family:'Playfair Display',serif;font-size:16px;font-weight:700;color:var(--amber)">Ksh ${wt}</div><div class="astat-l">In wallets</div></div>
+  </div>`;
 }
 
 function renderAll(){renderContestants();renderStats();renderTicker();renderCmts();renderWallet();updateNav();}
 
+/* VOTE MODAL */
 let voteTarget=null,voteQty=1;
 function openVoteModal(cid){
   if(!state.currentUser){showPage('auth');toast('Sign in to vote','err-t');return;}
-  if(!state.votingOpen){toast('⛔ Voting is closed!','err-t');return;}
+  const u=state.users[state.currentUser];
+  if(u.level==='viewer'){toast('Viewers cannot vote. Contact admin to upgrade.','err-t');return;}
+  if(!state.votingOpen){toast('Voting is currently closed.','err-t');return;}
   voteTarget=cid;voteQty=1;
-  const c=CONTESTANTS.find(x=>x.id===cid),u=state.users[state.currentUser];
+  const c=CONTESTANTS.find(x=>x.id===cid);
   document.getElementById('v-name').textContent='Vote for '+c.name;
   document.getElementById('qNum').textContent='1';
   document.getElementById('qCost').textContent='Ksh 10';
   document.getElementById('qBal').textContent='Ksh '+u.wallet;
   document.getElementById('v-err').style.display='none';
-  document.getElementById('voteOv').classList.remove('hidden');
+  document.getElementById('voteWrap').classList.add('open');
 }
-function closeVoteModal(){document.getElementById('voteOv').classList.add('hidden');}
-function closeVoteOv(e){if(e.target===document.getElementById('voteOv'))closeVoteModal();}
+function closeVoteModal(){document.getElementById('voteWrap').classList.remove('open');}
+function closeVoteOv(e){if(e.target===document.getElementById('voteWrap'))closeVoteModal();}
 function chQty(d){voteQty=Math.max(1,Math.min(50,voteQty+d));document.getElementById('qNum').textContent=voteQty;document.getElementById('qCost').textContent='Ksh '+(voteQty*10);}
 
 function submitVote(){
@@ -550,31 +1010,35 @@ function submitVote(){
   u.wallet-=cost;u.totalVotes+=voteQty;u.votedFor=voteTarget;
   u.txns.push({type:'vote',amt:-cost,time:new Date().toLocaleTimeString(),ref:`Vote: ${CONTESTANTS.find(c=>c.id===voteTarget).name}${voteQty>1?' (x'+voteQty+')':''}`});
   state.votes[voteTarget]+=voteQty;state.hourly[voteTarget]+=voteQty;
-  state.actLog.unshift({name:u.fname+' '+u.lname,cid:voteTarget,time:new Date().toLocaleTimeString()});
-  if(!state.msFired&&totalV()>=state.milestone){state.msFired=true;const b=document.getElementById('ms-banner');document.getElementById('ms-txt').textContent=`🎊 ${state.milestone} votes reached!`;b.style.display='block';setTimeout(()=>b.style.display='none',7000);}
-  closeVoteModal();toast(`✓ ${voteQty} vote${voteQty>1?'s':''} cast! Ksh ${cost} deducted.`,'ok');renderAll();
+  state.actLog.unshift({name:u.fn+' '+u.ln,cid:voteTarget,time:new Date().toLocaleTimeString()});
+  if(!state.msFired&&totalV()>=state.milestone){state.msFired=true;const b=document.getElementById('ms-banner');document.getElementById('ms-txt').textContent=`${state.milestone} votes reached! The community is engaged.`;b.style.display='block';setTimeout(()=>b.style.display='none',7000);}
+  closeVoteModal();
+  toast(`✓ ${voteQty} vote${voteQty>1?'s':''} cast! Ksh ${cost} deducted.`,'ok');
+  renderAll();
 }
 
+/* WALLET MODAL */
 let walletAction='deposit';
 function openWM(action){
   walletAction=action;const isD=action==='deposit';
   document.getElementById('wm-title').textContent=isD?'Deposit via M-PESA':'Withdraw to M-PESA';
   document.getElementById('wm-sub').textContent=isD?'STK push sent to your M-PESA number':'Funds sent to M-PESA within seconds';
   document.getElementById('wm-submit').textContent=isD?'📲 Send STK Push':'⬆ Withdraw Now';
-  document.getElementById('wm-submit').className='btn btn-full '+(isD?'btn-mpesa':'btn-ghost');
+  document.getElementById('wm-submit').className='btn btn-full '+(isD?'btn-gold':'btn-outline');
   if(state.currentUser)document.getElementById('wm-phone').value=state.users[state.currentUser].phone||'';
   document.getElementById('wm-amount').value='';
-  document.getElementById('walletOv').classList.remove('hidden');
+  document.getElementById('walletWrap').classList.add('open');
 }
-function closeWalletModal(){document.getElementById('walletOv').classList.add('hidden');}
-function closeWalletOv(e){if(e.target===document.getElementById('walletOv'))closeWalletModal();}
+function closeWalletModal(){document.getElementById('walletWrap').classList.remove('open');}
+function closeWalletOv(e){if(e.target===document.getElementById('walletWrap'))closeWalletModal();}
 function quickDep(amt){if(!state.currentUser){showPage('auth');return;}openWM('deposit');document.getElementById('wm-amount').value=amt;}
 
 function submitWallet(){
   if(!state.currentUser){showPage('auth');return;}
   const ph=document.getElementById('wm-phone').value.trim(),amt=parseInt(document.getElementById('wm-amount').value)||0;
-  if(!ph||ph.length<10){toast('Enter valid M-PESA number','err-t');return;}
+  if(!ph||ph.length<10){toast('Enter a valid M-PESA number','err-t');return;}
   if(amt<10){toast('Minimum amount is Ksh 10','err-t');return;}
+  if(walletAction==='withdraw'&&amt>70000){toast('Exceeds Ksh 70,000 daily withdrawal limit','err-t');return;}
   const u=state.users[state.currentUser];
   if(walletAction==='withdraw'){
     if(u.wallet<amt){toast('Insufficient wallet balance','err-t');return;}
@@ -589,34 +1053,84 @@ function submitWallet(){
 
 function postCmt(){
   const forId=document.getElementById('cmt-for').value,txt=document.getElementById('cmt-in').value.trim();
-  if(!forId||!txt){toast('Select contestant and write message','err-t');return;}
-  const name=state.currentUser?state.users[state.currentUser].fname+' '+state.users[state.currentUser].lname[0]+'.':'Anonymous';
+  if(!forId||!txt){toast('Select a contestant and type a message','err-t');return;}
+  const name=state.currentUser?state.users[state.currentUser].fn+' '+state.users[state.currentUser].ln[0]+'.':'Anonymous';
   state.comments.unshift({for:forId,text:txt,name,time:new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})});
   document.getElementById('cmt-in').value='';renderCmts();toast('✓ Message posted!','ok');
 }
 
-function shareWA(){window.open(`https://wa.me/?text=${encodeURIComponent('🗳️ Vote on UtuboraMentorsKE! '+window.location.href)}`,'_blank');}
+function shareWA(){window.open(`https://wa.me/?text=${encodeURIComponent('🏆 Vote on UtuboraMentorsKE! '+window.location.href)}`,'_blank');}
 function shareFB(){window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.href)}`,'_blank');}
 function copyLink(){navigator.clipboard?.writeText(window.location.href);toast('🔗 Link copied!','ok');}
 
-function toggleVoting(){state.votingOpen=!state.votingOpen;const btn=document.getElementById('vToggle'),lbl=document.getElementById('vStatusLbl');btn.classList.toggle('on',state.votingOpen);lbl.textContent=state.votingOpen?'OPEN':'CLOSED';renderContestants();toast(state.votingOpen?'✓ Voting opened':'⛔ Voting closed',state.votingOpen?'ok':'err-t');}
-function extendDL(){const h=parseInt(document.getElementById('extH').value)||24;state.deadline+=h*3600000;toast('✓ Deadline extended by '+h+'h','ok');}
+/* ADMIN CONTROLS */
+function toggleVoting(){
+  state.votingOpen=!state.votingOpen;
+  const btn=document.getElementById('vToggle'),lbl=document.getElementById('vStatusLbl');
+  btn.classList.toggle('on',state.votingOpen);
+  lbl.textContent=state.votingOpen?'OPEN':'CLOSED';
+  lbl.style.color=state.votingOpen?'var(--gold2)':'var(--red)';
+  renderContestants();
+  toast(state.votingOpen?'✓ Voting is now open':'Voting closed',state.votingOpen?'ok':'err-t');
+}
+function extendDL(){const h=parseInt(document.getElementById('extH').value)||24;state.deadline+=h*3600000;toast('✓ Deadline extended by '+h+' hours','ok');}
 function setMS(){const m=parseInt(document.getElementById('msInp').value)||100;state.milestone=m;state.msFired=false;toast('✓ Milestone set to '+m+' votes','ok');}
-function resetVotes(){if(!confirm('Reset ALL votes? Wallet balances kept.'))return;Object.keys(state.votes).forEach(k=>state.votes[k]=0);Object.keys(state.hourly).forEach(k=>state.hourly[k]=0);Object.values(state.users).forEach(u=>{u.totalVotes=0;u.votedFor=null;});state.actLog=[];state.msFired=false;renderAll();renderAdminAll();toast('✓ All votes reset','ok');}
-function exportCSV(){const rows=[['Name','Email','Phone','Total Votes','Wallet'],...Object.values(state.users).map(u=>[u.fname+' '+u.lname,u.email,u.phone,u.totalVotes,'Ksh '+u.wallet])];const csv=rows.map(r=>r.join(',')).join('\n');const a=document.createElement('a');a.href='data:text/csv;charset=utf-8,'+encodeURIComponent(csv);a.download='UtuboraMentorsKE_Users.csv';a.click();}
+function resetVotes(){
+  if(!confirm('Reset ALL votes? Wallet balances will be kept.'))return;
+  Object.keys(state.votes).forEach(k=>state.votes[k]=0);
+  Object.keys(state.hourly).forEach(k=>state.hourly[k]=0);
+  Object.values(state.users).forEach(u=>{u.totalVotes=0;u.votedFor=null;});
+  state.actLog=[];state.msFired=false;
+  renderAll();renderAdminAll();
+  toast('✓ All votes reset','ok');
+}
+function exportCSV(){
+  const rows=[['Name','Email','Phone','Level','Total Votes','Wallet'],...Object.values(state.users).map(u=>[u.fn+' '+u.ln,u.email,u.phone,u.level,u.totalVotes,'Ksh '+u.wallet])];
+  const csv=rows.map(r=>r.join(',')).join('\n');
+  const a=document.createElement('a');a.href='data:text/csv;charset=utf-8,'+encodeURIComponent(csv);a.download='UtuboraMentorsKE_Users.csv';a.click();
+}
 
-function aTab(btn,tab){document.querySelectorAll('.atab').forEach(b=>b.classList.remove('active'));btn.classList.add('active');['dash','voters','wallets','ctrl','log','rev'].forEach(t=>{const el=document.getElementById('atab-'+t);if(el)el.style.display=t===tab?'block':'none';});renderAdminAll();}
+function aTab(btn,tab){
+  document.querySelectorAll('.atab').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  ['dash','voters','wallets','access','ctrl','analytics'].forEach(t=>{const el=document.getElementById('atab-'+t);if(el)el.style.display=t===tab?'block':'none';});
+  renderAdminAll();
+}
 
-function showPage(name){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.getElementById('page-'+name).classList.add('active');window.scrollTo(0,0);if(name==='wallet')renderWallet();if(name==='admin')renderAdminAll();}
+/* PAGE ROUTING */
+function showPage(name){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById('page-'+name).classList.add('active');
+  window.scrollTo(0,0);
+  if(name==='wallet')renderWallet();
+  if(name==='admin')renderAdminAll();
+}
 
+/* UTILS */
 function v(id){return document.getElementById(id)?.value.trim();}
-function showErr(id,msg){const el=document.getElementById(id);if(el){el.textContent=msg;el.style.display='block';setTimeout(()=>el.style.display='none',4000);}}
+function showErr(id,msg){const el=document.getElementById(id);if(el){el.textContent=msg;el.style.display='block';setTimeout(()=>el.style.display='none',5000);}}
 let _tt;
-function toast(msg,type=''){const el=document.getElementById('toast');el.textContent=msg;el.className='toast '+(type||'');clearTimeout(_tt);_tt=setTimeout(()=>el.classList.add('hidden'),3200);}
+function toast(msg,type=''){
+  const el=document.getElementById('toast');
+  el.textContent=msg;el.className='toast '+(type||'');
+  clearTimeout(_tt);_tt=setTimeout(()=>el.classList.add('hidden'),3500);
+}
 
-function tick(){const now=Date.now();if(now>=state.deadline){if(state.votingOpen){state.votingOpen=false;renderContestants();}document.getElementById('cdown').textContent='CLOSED';return;}const d=state.deadline-now,h=Math.floor(d/3600000),m=Math.floor((d%3600000)/60000),s=Math.floor((d%60000)/1000);document.getElementById('cdown').textContent=`${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;document.getElementById('ddl').textContent=new Date(state.deadline).toLocaleDateString('en-KE',{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'});}
+/* COUNTDOWN */
+function tick(){
+  const now=Date.now();
+  if(now>=state.deadline){
+    if(state.votingOpen){state.votingOpen=false;renderContestants();}
+    document.getElementById('cdown').textContent='CLOSED';return;
+  }
+  const d=state.deadline-now,h=Math.floor(d/3600000),m=Math.floor((d%3600000)/60000),s=Math.floor((d%60000)/1000);
+  document.getElementById('cdown').textContent=`${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+  document.getElementById('ddl').textContent=new Date(state.deadline).toLocaleDateString('en-KE',{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'});
+}
 setInterval(tick,1000);tick();
 setInterval(()=>{Object.keys(state.hourly).forEach(k=>state.hourly[k]=0);},3600000);
 updateNav();
+renderStats();renderTicker();renderCmts();renderContestants();
 </script>
+</body>
 </html>
