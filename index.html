@@ -127,7 +127,14 @@ h1,h2,h3{font-family:'Playfair Display',serif}
 .pct-lbl{font-size:12px;font-weight:700;color:var(--gold2)}
 .vc-btns{display:flex;gap:7px;flex-wrap:wrap}
 /* BIO PANEL */
-.bio-panel{display:none;border-top:1px solid rgba(201,168,76,.1);padding:16px 14px 14px;animation:slideDown .25s ease}
+.bio-panel{display:none;border-top:1px solid rgba(201,168,76,.1);padding:0 0 14px;animation:slideDown .25s ease}
+.bio-profile-hero{display:flex;flex-direction:column;align-items:center;text-align:center;padding:22px 16px 18px;background:linear-gradient(180deg,rgba(201,168,76,.09) 0%,rgba(0,0,0,0) 100%);border-bottom:1px solid rgba(201,168,76,.1);margin-bottom:14px}
+.bio-big-img{width:110px;height:110px;border-radius:50%;object-fit:cover;border:3px solid var(--gold);box-shadow:0 0 0 5px rgba(201,168,76,.15),0 8px 32px rgba(0,0,0,.5);margin-bottom:12px;display:block}
+.bio-big-ini{width:110px;height:110px;border-radius:50%;background:linear-gradient(135deg,var(--gold-muted),var(--gold-dim));display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-weight:700;font-size:36px;color:var(--gold2);border:3px solid var(--gold);box-shadow:0 0 0 5px rgba(201,168,76,.15);margin-bottom:12px;flex-shrink:0}
+.bio-profile-name{font-family:'Playfair Display',serif;font-size:20px;font-weight:800;color:var(--text);margin-bottom:4px}
+.bio-profile-role{font-size:11px;color:var(--gold2);font-weight:600;margin-bottom:10px;font-style:italic;max-width:320px}
+.bio-soc-row{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-bottom:4px}
+.bio-pad{padding:0 14px}
 .bio-panel.open{display:block}
 @keyframes slideDown{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:translateY(0)}}
 .bio-section{margin-bottom:14px}
@@ -589,7 +596,9 @@ const CONTESTANTS = [
     name: 'Sam Vidambu',
     ini: 'SV',
     role: 'Academic Mentor · CEO, Ambigen Group · Author · Lecturer',
-    photo: 'https://i.pravatar.cc/150?img=12',
+    photo: 'https://i.ibb.co/mCHxynbh/samvid.jpg',
+    photo2: 'https://i.ibb.co/PsMmRC6m/samvids.jpg',
+    photoCredit: 'Photo: Business Today Kenya',
     story: [
       "Sam Vidambu grew up in grinding poverty — a mud-walled, grass-roofed two-room house in a family of five, rooms divided by a dirty cloth sheet. Despite these circumstances, he channelled every hardship into ambition. He graduated with a Bachelor's degree in Commerce from Dedan Kimathi University of Technology and was one of the rare graduates to secure a job immediately — as a Financial Manager earning Ksh 65,000 a month.",
       "But something gnawed at him. The payslip was comfortable, the impact was not. So he made the bravest decision of his life: he quit. He founded Ambigen Group Limited, a social enterprise built on one mission — feeding minds, inspiring souls, and transforming generations.",
@@ -616,7 +625,9 @@ const CONTESTANTS = [
     name: 'Kelly Inspiration',
     ini: 'KI',
     role: 'Mindset Transformation Coach · Content Creator · Youth Empowerment Speaker',
-    photo: 'https://i.pravatar.cc/150?img=5',
+    photo: 'https://i.ibb.co/ZpGhfChW/kelly.jpg',
+    photo2: 'https://i.ibb.co/wZz84xsH/kellyinsp.jpg',
+    photoCredit: 'Photo: YouTube @KellyInspiration',
     story: [
       "Kelly Inspiration is one of Kenya's most dynamic mindset transformation coaches, known for turning ordinary Kenyans into believers in their own potential. With a vibrant presence on YouTube, TikTok, and Facebook, Kelly has built a community of thousands who tune in daily for a dose of truth, motivation, and practical guidance.",
       "Kelly's coaching philosophy is simple but radical: real change starts in the mind. Before you can transform your finances, your career, or your relationships — you must first transform the way you think about yourself. Kelly's content is raw, relatable, and rooted in real Kenyan experiences — from unemployment and self-doubt to faith and breakthrough.",
@@ -640,7 +651,9 @@ const CONTESTANTS = [
     name: 'Pr. Elizabeth Mokoro',
     ini: 'EM',
     role: 'SDA Pastor · Preacher of the Year 2022 · Family & Marriage Counsellor · TV Personality',
-    photo: 'https://i.pravatar.cc/150?img=47',
+    photo: 'https://i.ibb.co/Kc7M7m06/elizzz.jpg',
+    photo2: 'https://i.ibb.co/xSQRw7BB/elizabethmok.jpg',
+    photoCredit: 'Photo: TUKO.co.ke / SDA Church',
     story: [
       "Pastor Elizabeth Mokoro was born in Rachuonyo, Homabay County. A proud Luo daughter, she rose to national fame not through hype, but through the power of the unfiltered truth. Her sermons — direct, bold, and firmly rooted in scripture — have made her one of the most talked-about preachers in Kenya. In 2022, TUKO.co.ke readers voted her Preacher of the Year, defeating the likes of Pastors Ezekiel Odero, Daniel Mgogo, and T Mwangi.",
       "Elizabeth is a Seventh-Day Adventist pastor serving under the SDA Central Nyanza Conference. She has preached at major churches across Kenya including Kisii Central SDA, Nairobi Central, Lavington SDA, and Kisumu Central. She also hosts a regular show on Imani TV, a free-to-air channel broadcasting across North Rift and Western Kenya.",
@@ -666,7 +679,9 @@ const CONTESTANTS = [
     name: 'Wambugu wa Kamau',
     ini: 'WK',
     role: 'Mwalimu wa CBC · Life Coach · Motivational Speaker · Team Building Expert',
-    photo: 'https://i.pravatar.cc/150?img=68',
+    photo: 'https://i.ibb.co/FLzsv2x1/kamau.jpg',
+    photo2: 'https://i.ibb.co/8D07kvWM/wambugu.jpg',
+    photoCredit: 'Photo: Kenyan Moves / YouTube',
     story: [
       "Wambugu wa Kamau — popularly known as \"Mwalimu wa CBC\" or simply \"The Ambassador\" — has emerged as one of Kenya's most trusted educational voices during a time of massive national transformation. As Kenya's first CBC cohort transitions to Grade 10 in 2026, millions of confused parents and students have found clarity and calm in his voice.",
       "A Life Coach, Motivational Speaker, and Team Building Expert, Wambugu visits and physically addresses students and teachers in more than 500 secondary schools across Kenya every single year — meaning tens of thousands of learners benefit directly from his presence. He is the former Founder and Director of Nuru ya Sanaa Media Productions, and serves as Ambassador for Kenya's Digital Principal Platform.",
@@ -788,7 +803,7 @@ function renderContestants(){
       <div class="vc-main">
         <div class="vc-row">
           <div class="vc-avatar-wrap">
-            <img class="vc-img" src="${c.photo}" alt="${c.name}" onerror="this.style.display='none';document.getElementById('ini-${c.id}').style.display='flex'"/>
+            <img class="vc-img" src="${c.photo}" alt="${c.name}" referrerpolicy="no-referrer" onerror="if(c.photo2&&this.src!==c.photo2){this.src=c.photo2;}else{this.style.display='none';document.getElementById('ini-'+c.id).style.display='flex';}"/>
             <div class="vc-ini" id="ini-${c.id}" style="display:none">${c.ini}</div>
             <div class="vc-rank-dot">${medals[i]}</div>
           </div>
@@ -818,6 +833,18 @@ function renderContestants(){
 
       <div class="bio-panel${isOpen?' open':''}" id="bio-${c.id}">
 
+        <div class="bio-profile-hero">
+          <img class="bio-big-img" id="bio-img-${c.id}"
+               src="${c.photo}"
+               alt="${c.name}"
+               referrerpolicy="no-referrer"
+               onerror="if(c.photo2&&this.src!==c.photo2){this.src=c.photo2;}else{this.style.display='none';document.getElementById('bio-ini-${c.id}').style.display='flex';}"/>
+          <div class="bio-big-ini" id="bio-ini-${c.id}" style="display:none">${c.ini}</div>
+          <div class="bio-profile-name">${c.name}</div>
+          <div class="bio-profile-role">${c.role}</div>
+          <div class="bio-soc-row">${buildSocIcons(c)}</div>
+        </div>
+        <div class="bio-pad">
         <div class="bio-section">
           <div class="bio-sec-title">📖 Their Story</div>
           <div class="bio-text">${storyHTML}</div>
@@ -850,6 +877,7 @@ function renderContestants(){
           <div class="bio-sec-title">🔗 Connect With ${c.name.split(' ')[0]}</div>
           <div class="connect-row">${buildConnectChips(c)}</div>
         </div>
+        </div><!-- /bio-pad -->
 
       </div>
     </div>`;
